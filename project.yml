@@ -26,6 +26,7 @@ targets:
         INFOPLIST_FILE: ShowMd/Info.plist
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: ShowMd/ShowMd.entitlements
+        DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
         MARKETING_VERSION: "1.0.0"
     dependencies:
@@ -46,6 +47,7 @@ targets:
         INFOPLIST_FILE: ShowMdExtension/Info.plist
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: ShowMdExtension/ShowMdExtension.entitlements
+        DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
         MARKETING_VERSION: "1.0.0"
     dependencies:
