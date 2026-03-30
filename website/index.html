@@ -409,6 +409,16 @@
   .preview-btn.active.other  { background: #444; color: var(--white); }
   .preview-btn.active.macos  { background: #333; color: var(--muted); }
 
+  .preview-scene {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    height: 480px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 48px 100px rgba(0,0,0,0.55);
+  }
+
   .app-frame {
     width: 100%;
     max-width: 760px;
@@ -416,7 +426,157 @@
     border-radius: 16px;
     border: 0.5px solid rgba(255,255,255,0.1);
     overflow: hidden;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    box-shadow: 0 32px 64px rgba(0,0,0,0.6), 0 8px 24px rgba(0,0,0,0.4);
+    position: relative;
+    z-index: 2;
+  }
+
+  .preview-scene .app-frame {
+    position: absolute;
+    top: 38px;
+    left: 152px;
+    right: 0;
+    height: calc(100% - 38px);
+    max-width: none;
+    width: auto;
+    border-radius: 10px 0 0 0;
+    box-shadow: -24px 0 64px rgba(0,0,0,0.7);
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .finder-window {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: #1E1E20;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .finder-titlebar {
+    background: #2B2B2D;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .finder-nav-arrows {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.2);
+    margin-left: 10px;
+    display: flex;
+    gap: 4px;
+    line-height: 1;
+  }
+
+  .finder-window-title {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .finder-toolbar-right {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255,255,255,0.2);
+    line-height: 1;
+  }
+
+  .finder-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .finder-sidebar {
+    width: 152px;
+    background: #252527;
+    border-right: 0.5px solid rgba(255,255,255,0.06);
+    padding: 8px 0;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  .finder-sidebar-label {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.22);
+    padding: 8px 12px 3px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+
+  .finder-sidebar-item {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    padding: 4px 10px 4px 12px;
+    color: rgba(255,255,255,0.42);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .finder-sidebar-item .si {
+    font-size: 11px;
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  .finder-sidebar-item.active {
+    color: rgba(255,255,255,0.88);
+    background: rgba(61,126,245,0.25);
+    border-radius: 5px;
+    margin: 0 5px;
+    padding: 4px 7px;
+  }
+
+  .finder-sidebar-item.active .si { opacity: 1; }
+
+  .finder-sidebar-separator {
+    height: 6px;
+  }
+
+  .finder-files {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .finder-file-row {
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 12px;
+    padding: 6px 16px;
+    color: rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  }
+
+  .finder-file-row.selected {
+    background: rgba(61,126,245,0.28);
+    color: rgba(255,255,255,0.9);
+  }
+
+  .finder-file-icon {
+    font-size: 13px;
+    line-height: 1;
   }
 
   .app-titlebar {
@@ -1313,6 +1473,83 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── Light mode: preview overrides ── */
+  html[data-theme="light"] .app-frame,
+  @media (prefers-color-scheme: light) { html:not([data-theme="dark"]) .app-frame {
+    background: #FAFAFA;
+    border-color: rgba(0,0,0,0.08);
+  }}
+
+  html[data-theme="light"] .app-titlebar,
+  html[data-theme="light"] .app-inner-bar {
+    background: #EFEFED;
+    border-bottom-color: rgba(0,0,0,0.06);
+  }
+  html[data-theme="light"] .app-filename { color: rgba(0,0,0,0.35); }
+  html[data-theme="light"] .app-tab { color: rgba(0,0,0,0.4); }
+  html[data-theme="light"] .app-tab.active { background: rgba(61,126,245,0.12); color: #2D6FE8; }
+  html[data-theme="light"] .app-copy-btn {
+    color: rgba(0,0,0,0.35);
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.1);
+  }
+  html[data-theme="light"] .md-meta-block { border-color: rgba(0,0,0,0.08); }
+  html[data-theme="light"] .md-meta-summary { background: #EFEFED; color: rgba(0,0,0,0.35); }
+  html[data-theme="light"] .md-meta-summary-arrow { color: rgba(0,0,0,0.25); }
+  html[data-theme="light"] .md-meta-table th, html[data-theme="light"] .md-meta-table td { border-top-color: rgba(0,0,0,0.05); }
+  html[data-theme="light"] .md-meta-table th { color: #2D6FE8; }
+  html[data-theme="light"] .md-meta-table td { color: #444; }
+  html[data-theme="light"] .md-h1 { color: #0A0A0A; }
+  html[data-theme="light"] .md-h2 { color: #333; }
+  html[data-theme="light"] .md-p { color: #555; }
+  html[data-theme="light"] .md-code { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #444; }
+  html[data-theme="light"] .md-tag { background: rgba(61,126,245,0.08); color: #2D6FE8; border-color: rgba(61,126,245,0.18); }
+  html[data-theme="light"] .md-raw-frontmatter { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #888; }
+  html[data-theme="light"] .app-body-plain { color: #777; }
+  html[data-theme="light"] .finder-window { background: #DCDCDA; }
+  html[data-theme="light"] .finder-titlebar { background: #C8C8C6; border-bottom-color: rgba(0,0,0,0.07); }
+  html[data-theme="light"] .finder-window-title { color: rgba(0,0,0,0.55); }
+  html[data-theme="light"] .finder-nav-arrows { color: rgba(0,0,0,0.25); }
+  html[data-theme="light"] .finder-sidebar { background: #D2D2D0; border-right-color: rgba(0,0,0,0.07); }
+  html[data-theme="light"] .finder-sidebar-label { color: rgba(0,0,0,0.3); }
+  html[data-theme="light"] .finder-sidebar-item { color: rgba(0,0,0,0.5); }
+  html[data-theme="light"] .finder-sidebar-item.active { background: rgba(61,126,245,0.18); color: rgba(0,0,0,0.75); }
+  html[data-theme="light"] .finder-file-row { color: rgba(0,0,0,0.5); border-bottom-color: rgba(0,0,0,0.04); }
+  html[data-theme="light"] .finder-file-row.selected { background: rgba(61,126,245,0.2); color: rgba(0,0,0,0.85); }
+
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme="dark"]) .app-frame { background: #FAFAFA; border-color: rgba(0,0,0,0.08); }
+    html:not([data-theme="dark"]) .app-titlebar,
+    html:not([data-theme="dark"]) .app-inner-bar { background: #EFEFED; border-bottom-color: rgba(0,0,0,0.06); }
+    html:not([data-theme="dark"]) .app-filename { color: rgba(0,0,0,0.35); }
+    html:not([data-theme="dark"]) .app-tab { color: rgba(0,0,0,0.4); }
+    html:not([data-theme="dark"]) .app-tab.active { background: rgba(61,126,245,0.12); color: #2D6FE8; }
+    html:not([data-theme="dark"]) .app-copy-btn { color: rgba(0,0,0,0.35); background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.1); }
+    html:not([data-theme="dark"]) .md-meta-block { border-color: rgba(0,0,0,0.08); }
+    html:not([data-theme="dark"]) .md-meta-summary { background: #EFEFED; color: rgba(0,0,0,0.35); }
+    html:not([data-theme="dark"]) .md-meta-summary-arrow { color: rgba(0,0,0,0.25); }
+    html:not([data-theme="dark"]) .md-meta-table th, html:not([data-theme="dark"]) .md-meta-table td { border-top-color: rgba(0,0,0,0.05); }
+    html:not([data-theme="dark"]) .md-meta-table th { color: #2D6FE8; }
+    html:not([data-theme="dark"]) .md-meta-table td { color: #444; }
+    html:not([data-theme="dark"]) .md-h1 { color: #0A0A0A; }
+    html:not([data-theme="dark"]) .md-h2 { color: #333; }
+    html:not([data-theme="dark"]) .md-p { color: #555; }
+    html:not([data-theme="dark"]) .md-code { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #444; }
+    html:not([data-theme="dark"]) .md-tag { background: rgba(61,126,245,0.08); color: #2D6FE8; border-color: rgba(61,126,245,0.18); }
+    html:not([data-theme="dark"]) .md-raw-frontmatter { background: #ECECEA; border-color: rgba(0,0,0,0.07); color: #888; }
+    html:not([data-theme="dark"]) .app-body-plain { color: #777; }
+    html:not([data-theme="dark"]) .finder-window { background: #DCDCDA; }
+    html:not([data-theme="dark"]) .finder-titlebar { background: #C8C8C6; border-bottom-color: rgba(0,0,0,0.07); }
+    html:not([data-theme="dark"]) .finder-window-title { color: rgba(0,0,0,0.55); }
+    html:not([data-theme="dark"]) .finder-nav-arrows { color: rgba(0,0,0,0.25); }
+    html:not([data-theme="dark"]) .finder-sidebar { background: #D2D2D0; border-right-color: rgba(0,0,0,0.07); }
+    html:not([data-theme="dark"]) .finder-sidebar-label { color: rgba(0,0,0,0.3); }
+    html:not([data-theme="dark"]) .finder-sidebar-item { color: rgba(0,0,0,0.5); }
+    html:not([data-theme="dark"]) .finder-sidebar-item.active { background: rgba(61,126,245,0.18); color: rgba(0,0,0,0.75); }
+    html:not([data-theme="dark"]) .finder-file-row { color: rgba(0,0,0,0.5); border-bottom-color: rgba(0,0,0,0.04); }
+    html:not([data-theme="dark"]) .finder-file-row.selected { background: rgba(61,126,245,0.2); color: rgba(0,0,0,0.85); }
+  }
+
   @media (max-width: 640px) {
     nav { padding: 16px 20px; }
     .nav-links { display: none; }
@@ -1388,6 +1625,42 @@
       <button class="preview-btn active showmd" data-state="0">✨ With Show.md</button>
       <button class="preview-btn other" data-state="1">😬 With other apps</button>
       <button class="preview-btn macos" data-state="2">😩 Default macOS</button>
+    </div>
+
+    <div class="preview-scene">
+    <div class="finder-window">
+      <div class="finder-titlebar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <div class="finder-nav-arrows"><span>‹</span><span>›</span></div>
+        <span class="finder-window-title">show.md</span>
+      </div>
+      <div class="finder-body">
+        <div class="finder-sidebar">
+          <div class="finder-sidebar-item"><span class="si">🕐</span> Recents</div>
+          <div class="finder-sidebar-item"><span class="si">📡</span> AirDrop</div>
+          <div class="finder-sidebar-separator"></div>
+          <div class="finder-sidebar-label">Favorites</div>
+          <div class="finder-sidebar-item"><span class="si">⚙️</span> Applications</div>
+          <div class="finder-sidebar-item"><span class="si">⬇️</span> Downloads</div>
+          <div class="finder-sidebar-item"><span class="si">🖥</span> Desktop</div>
+          <div class="finder-sidebar-item"><span class="si">📄</span> Documents</div>
+          <div class="finder-sidebar-item active"><span class="si">📁</span> Code</div>
+          <div class="finder-sidebar-separator"></div>
+          <div class="finder-sidebar-label">Locations</div>
+          <div class="finder-sidebar-item"><span class="si">☁️</span> iCloud Drive</div>
+          <div class="finder-sidebar-item"><span class="si">💜</span> <a href="https://pr.tn/ref/MZB6Q7BF" target="_blank" rel="noopener" style="color:inherit;text-decoration:none;">Proton Drive</a></div>
+        </div>
+        <div class="finder-files">
+          <div class="finder-file-row"><span class="finder-file-icon">📝</span> AGENTS.md</div>
+          <div class="finder-file-row selected"><span class="finder-file-icon">📝</span> CHANGELOG.md</div>
+          <div class="finder-file-row"><span class="finder-file-icon">📝</span> CLAUDE.md</div>
+          <div class="finder-file-row"><span class="finder-file-icon">📝</span> README.md</div>
+          <div class="finder-file-row"><span class="finder-file-icon">📁</span> docs</div>
+          <div class="finder-file-row"><span class="finder-file-icon">📁</span> website</div>
+        </div>
+      </div>
     </div>
 
     <div class="app-frame">
@@ -1476,6 +1749,7 @@ before running any automated task.
 $ npm run build · npm test · npm run lint</div>
       </div>
     </div>
+    </div><!-- /preview-scene -->
 
   </section>
 
