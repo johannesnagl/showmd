@@ -14,6 +14,15 @@ public enum MarkdownRenderer {
         return HTMLTemplate.wrap(body: body, theme: theme, fontSize: fontSize)
     }
 
+    /// Returns only the HTML body content — no wrapping page, no CSS. For clipboard copy.
+    public static func renderBody(_ markdown: String) -> String {
+        let fm = FrontmatterParser.parse(markdown)
+        let document = Document(parsing: fm.body)
+        var visitor = HTMLVisitor()
+        let contentBody = visitor.visit(document)
+        return HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
+    }
+
     public static func renderCombined(
         _ markdown: String,
         theme: Settings.Theme,

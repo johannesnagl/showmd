@@ -29,7 +29,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         copyButton.controlSize = .small
         copyButton.translatesAutoresizingMaskIntoConstraints = false
 
-        printButton = NSButton(title: "Print", target: self, action: #selector(printDocument))
+        printButton = NSButton(title: "Print", target: self, action: #selector(printMarkdown))
         printButton.bezelStyle = .rounded
         printButton.controlSize = .small
         printButton.translatesAutoresizingMaskIntoConstraints = false
@@ -103,19 +103,15 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         }
     }
 
-    @objc private func printDocument() {
-        guard let webView, let window = view.window else { return }
+    @objc private func printMarkdown() {
+        guard let webView else { return }
         let op = webView.printOperation(with: NSPrintInfo.shared)
-        op.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
+        op.run()
     }
 
     private func loadCombined() {
         guard let webView else { return }
-        renderedHTML = MarkdownRenderer.render(
-            markdownSource,
-            theme: Settings.theme,
-            fontSize: Settings.fontSize
-        )
+        renderedHTML = MarkdownRenderer.renderBody(markdownSource)
         let html = MarkdownRenderer.renderCombined(
             markdownSource,
             theme: Settings.theme,
