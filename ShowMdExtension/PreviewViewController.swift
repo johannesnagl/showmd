@@ -50,7 +50,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
                     self.currentTab = Settings.defaultTab
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
                     self.markdownSource = source
-                    self.loadCurrentTab()
+                    self.loadCombined()
                     handler(nil)
                 }
             } catch {
@@ -61,25 +61,18 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
     @objc private func tabChanged(_ sender: NSSegmentedControl) {
         currentTab = sender.selectedSegment == 0 ? .rendered : .source
-        loadCurrentTab()
+        let cls = currentTab == .rendered ? "tab-rendered" : "tab-source"
+        webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'")
     }
 
-    private func loadCurrentTab() {
+    private func loadCombined() {
         guard let webView else { return }
-        let html: String
-        switch currentTab {
-        case .rendered:
-            html = MarkdownRenderer.render(
-                markdownSource,
-                theme: Settings.theme,
-                fontSize: Settings.fontSize
-            )
-        case .source:
-            html = MarkdownRenderer.sourceHTML(
-                markdownSource,
-                fontSize: Settings.fontSize
-            )
-        }
+        let html = MarkdownRenderer.renderCombined(
+            markdownSource,
+            theme: Settings.theme,
+            fontSize: Settings.fontSize,
+            defaultTab: currentTab
+        )
         webView.loadHTMLString(html, baseURL: nil)
     }
 }

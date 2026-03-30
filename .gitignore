@@ -7,4 +7,5 @@ DerivedData/
 *.dSYM.zip
 *.dSYM
 MarkdownRenderer/Package.resolved
+MarkdownRenderer/.swiftpm/
 show.md.xcodeproj/

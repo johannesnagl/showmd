@@ -15,6 +15,39 @@ public enum HTMLTemplate {
         """
     }
 
+    public static func wrapCombined(
+        renderedBody: String,
+        sourceBody: String,
+        theme: Settings.Theme,
+        fontSize: Settings.FontSize,
+        defaultTab: Settings.Tab
+    ) -> String {
+        let initialClass = defaultTab == .rendered ? "tab-rendered" : "tab-source"
+        return """
+        <!DOCTYPE html>
+        <html data-theme="\(theme.rawValue)" class="\(initialClass)" style="font-size: \(fontSize.cssValue)">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="color-scheme" content="light dark">
+          <style>
+        \(css)
+          html.tab-source  .view-rendered { display: none; }
+          html.tab-rendered .view-source  { display: none; }
+          .view-source { padding: 16px; }
+          .view-source pre {
+            margin: 0; word-wrap: break-word; white-space: pre-wrap;
+            font-size: 1em; border-radius: 0; padding: 0; background: none;
+          }
+          </style>
+        </head>
+        <body>
+          <div class="view-rendered">\(renderedBody)</div>
+          <div class="view-source">\(sourceBody)</div>
+        </body>
+        </html>
+        """
+    }
+
     public static func wrapSource(body: String, fontSize: Settings.FontSize) -> String {
         """
         <!DOCTYPE html>
