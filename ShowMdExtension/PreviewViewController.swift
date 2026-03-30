@@ -42,6 +42,8 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
     func preparePreviewOfFile(at url: URL, completionHandler handler: @escaping (Error?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
+            let accessing = url.startAccessingSecurityScopedResource()
+            defer { if accessing { url.stopAccessingSecurityScopedResource() } }
             do {
                 let source = try String(contentsOf: url, encoding: .utf8)
                 DispatchQueue.main.async {
