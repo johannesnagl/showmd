@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>show.md — markdown was never meant to stay raw</title>
+<title>show.md — markdown was never meant to be previewed plain text</title>
 <meta name="description" content="A native macOS Quick Look extension that renders Markdown beautifully. Free, private, no account needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
@@ -216,10 +216,45 @@
     z-index: 1;
     padding: 0 40px 120px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     opacity: 0;
     animation: fadeUp 0.8s 0.8s forwards;
   }
+
+  .preview-switcher {
+    display: flex;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 4px;
+  }
+
+  .preview-btn {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    padding: 7px 16px;
+    border-radius: 7px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .preview-btn:hover { color: var(--white); }
+
+  .preview-btn.active {
+    background: var(--white);
+    color: var(--ink);
+  }
+
+  .preview-btn.active.showmd { background: var(--teal); color: var(--white); }
+  .preview-btn.active.other  { background: #444; color: var(--white); }
+  .preview-btn.active.macos  { background: #333; color: var(--muted); }
 
   .app-frame {
     width: 100%;
@@ -271,9 +306,52 @@
     margin-right: auto;
   }
 
+  /* preview states */
+  .app-state { display: none; }
+  .app-state.visible { display: block; }
+
+  /* state 1: show.md */
   .app-body {
-    padding: 32px 40px;
+    padding: 28px 32px;
   }
+
+  .md-meta-block {
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .md-meta-summary {
+    background: #1E1E1E;
+    padding: 8px 14px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .md-meta-summary-arrow { font-size: 8px; color: rgba(255,255,255,0.2); }
+
+  .md-meta-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+  }
+
+  .md-meta-table th, .md-meta-table td {
+    padding: 6px 14px;
+    border-top: 0.5px solid rgba(255,255,255,0.05);
+    text-align: left;
+  }
+
+  .md-meta-table th { color: #6B9FFF; width: 30%; font-weight: 400; }
+  .md-meta-table td { color: #777; }
 
   .md-h1 {
     font-size: 22px;
@@ -349,6 +427,50 @@
     padding: 3px 10px;
     border-radius: 4px;
   }
+
+  /* state 2: other apps */
+  .app-body-other {
+    padding: 28px 32px;
+  }
+
+  .md-raw-frontmatter {
+    background: #0F0F0F;
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: #555;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    white-space: pre;
+  }
+
+  /* state 3: macOS default */
+  .app-body-plain {
+    padding: 28px 32px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 12px;
+    color: #888;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+
+  .progress-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+  }
+
+  .progress-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s;
+  }
+
+  .progress-dot.active { background: var(--teal); }
 
   /* INSTALL */
   .install {
@@ -826,6 +948,16 @@
     .fm-section { padding: 60px 20px; }
   }
 
+  .app-inner-bar {
+    background: #1A1A1A;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -890,10 +1022,10 @@
     </div>
 
     <h1 class="hero-title">
-      Markdown was never<br>meant to <em>stay raw.</em>
+      Markdown was never meant<br>to be <em>previewed plain text.</em>
     </h1>
 
-    <p class="hero-tagline">The fastest way to open any .md file on macOS.</p>
+    <p class="hero-tagline">The most readable way to preview any .md file on macOS.</p>
 
     <div class="hero-actions">
       <a href="https://github.com/johannesnagl/show.md/releases/latest" class="btn-primary">
@@ -908,30 +1040,91 @@
 
   <!-- APP PREVIEW -->
   <section class="preview">
+    <div class="preview-switcher">
+      <button class="preview-btn active showmd" data-state="0">With Show.md</button>
+      <button class="preview-btn other" data-state="1">With other apps</button>
+      <button class="preview-btn macos" data-state="2">Default Mac OS</button>
+    </div>
+
     <div class="app-frame">
       <div class="app-titlebar">
         <div class="dot dot-r"></div>
         <div class="dot dot-y"></div>
         <div class="dot dot-g"></div>
         <span class="app-filename">AGENTS.md</span>
-        <div class="app-tabs">
-          <span class="app-tab active">Rendered</span>
-          <span class="app-tab">Source</span>
+      </div>
+
+      <!-- State 1: With Show.md -->
+      <div class="app-state visible" id="state-showmd">
+        <div class="app-inner-bar">
+          <div class="app-tabs">
+            <span class="app-tab active">Rendered</span>
+            <span class="app-tab">Source</span>
+          </div>
+        </div>
+        <div class="app-body">
+          <div class="md-meta-block">
+            <div class="md-meta-summary">
+              <span class="md-meta-summary-arrow">▶</span>
+              Frontmatter (3 keys found)
+            </div>
+            <table class="md-meta-table">
+              <tr><th>title</th><td>Agent instructions</td></tr>
+              <tr><th>tags</th><td>agent, config, v2</td></tr>
+              <tr><th>version</th><td>2.1</td></tr>
+            </table>
+          </div>
+          <div class="md-h1">Agent instructions</div>
+          <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
+          <div class="md-h2">Commands</div>
+          <div class="md-code"><span>$</span> npm run build &nbsp;·&nbsp; npm test &nbsp;·&nbsp; npm run lint</div>
+          <div class="md-tags">
+            <span class="md-tag">agent</span>
+            <span class="md-tag">config</span>
+            <span class="md-tag">v2</span>
+          </div>
         </div>
       </div>
-      <div class="app-body">
-        <div class="md-h1">Agent instructions</div>
-        <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
-        <div class="md-h2">Commands</div>
-        <div class="md-code"><span>$</span> npm run build &nbsp;·&nbsp; npm test &nbsp;·&nbsp; npm run lint</div>
-        <div class="md-h2">Tags</div>
-        <div class="md-tags">
-          <span class="md-tag">agent</span>
-          <span class="md-tag">config</span>
-          <span class="md-tag">readonly</span>
-          <span class="md-tag">v2.1</span>
+
+      <!-- State 2: With other apps -->
+      <div class="app-state" id="state-other">
+        <div class="app-body-other">
+          <pre class="md-raw-frontmatter">---
+title: Agent instructions
+tags: [agent, config, v2]
+version: 2.1
+---</pre>
+          <div class="md-h1">Agent instructions</div>
+          <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
+          <div class="md-h2">Commands</div>
+          <div class="md-code"><span>$</span> npm run build &nbsp;·&nbsp; npm test &nbsp;·&nbsp; npm run lint</div>
         </div>
       </div>
+
+      <!-- State 3: Default Mac OS -->
+      <div class="app-state" id="state-macos">
+        <div class="app-body-plain">---
+title: Agent instructions
+tags: [agent, config, v2]
+version: 2.1
+---
+
+# Agent instructions
+
+This file configures how the AI agent
+behaves in this repo. Read carefully
+before running any automated task.
+
+## Commands
+
+$ npm run build · npm test · npm run lint</div>
+      </div>
+    </div>
+
+    <div class="progress-dots">
+      <div class="progress-dot active"></div>
+      <div class="progress-dot"></div>
+      <div class="progress-dot"></div>
     </div>
   </section>
 
@@ -1143,5 +1336,43 @@
   </ul>
 </footer>
 
+<script>
+(function() {
+  const stateIds = ['state-showmd', 'state-other', 'state-macos'];
+  const btns = document.querySelectorAll('.preview-btn');
+  const dots = document.querySelectorAll('.progress-dot');
+  const btnClasses = ['showmd', 'other', 'macos'];
+  let current = 0;
+  let timer;
+
+  function showState(i) {
+    stateIds.forEach((id, j) => {
+      document.getElementById(id).classList.toggle('visible', j === i);
+      dots[j].classList.toggle('active', j === i);
+      btns[j].classList.toggle('active', j === i);
+    });
+    current = i;
+  }
+
+  function startCycle() {
+    clearInterval(timer);
+    timer = setInterval(function() {
+      showState((current + 1) % 3);
+    }, 3500);
+  }
+
+  // Buttons always carry their color class
+  btns.forEach(function(btn, i) {
+    btn.classList.add(btnClasses[i]);
+    btn.addEventListener('click', function() {
+      showState(i);
+      startCycle();
+    });
+  });
+
+  showState(0);
+  startCycle();
+})();
+</script>
 </body>
 </html>
