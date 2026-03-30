@@ -9,6 +9,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     private var copyButton: NSButton!
     private var printButton: NSButton!
     private var markdownSource = ""
+    private var renderedHTML = ""
     private var currentTab: Settings.Tab = Settings.defaultTab
 
     override func loadView() {
@@ -92,20 +93,23 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     }
 
     @objc private func copyAsHTML() {
-        webView?.evaluateJavaScript("document.querySelector('.view-rendered').innerHTML") { result, _ in
-            if let html = result as? String {
-                NSPasteboard.general.clearContents()
-                NSPasteboard.general.setString(html, forType: .html)
-            }
-        }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(renderedHTML, forType: .string)
     }
 
     @objc private func printDocument() {
-        webView?.evaluateJavaScript("window.print()")
+        guard let webView, let window = view.window else { return }
+        let op = webView.printOperation(with: NSPrintInfo.shared)
+        op.runModal(for: window, delegate: nil, didRun: nil, contextInfo: nil)
     }
 
     private func loadCombined() {
         guard let webView else { return }
+        renderedHTML = MarkdownRenderer.render(
+            markdownSource,
+            theme: Settings.theme,
+            fontSize: Settings.fontSize
+        )
         let html = MarkdownRenderer.renderCombined(
             markdownSource,
             theme: Settings.theme,
