@@ -6,7 +6,8 @@
 <title>show.md — markdown was never meant to be previewed plain text</title>
 <meta name="description" content="A native macOS Quick Look extension that renders Markdown beautifully. Free, private, no account needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -114,11 +115,12 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 15px;
     color: var(--white);
     letter-spacing: -0.01em;
     text-decoration: none;
+    color: var(--fg);
   }
 
   .nav-logo span { color: var(--muted); }
@@ -136,7 +138,7 @@
     transition: color 0.2s;
   }
 
-  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover { color: var(--fg); }
 
   .nav-cta {
     font-size: 13px;
@@ -174,7 +176,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--muted);
     border: 0.5px solid var(--badge-bdr);
@@ -250,11 +252,11 @@
     transition: color 0.2s;
   }
 
-  .btn-secondary:hover { color: var(--white); }
+  .btn-secondary:hover { color: var(--fg); }
 
   .hero-meta {
     margin-top: 16px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--fg-subtle);
     letter-spacing: 0.04em;
@@ -278,14 +280,14 @@
   .preview-switcher {
     display: flex;
     gap: 6px;
-    background: rgba(255,255,255,0.04);
-    border: 0.5px solid rgba(255,255,255,0.08);
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
     border-radius: 10px;
     padding: 4px;
   }
 
   .preview-btn {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     padding: 7px 16px;
     border-radius: 7px;
@@ -297,7 +299,7 @@
     white-space: nowrap;
   }
 
-  .preview-btn:hover { color: var(--white); }
+  .preview-btn:hover { color: var(--fg); }
 
   .preview-btn.active {
     background: var(--white);
@@ -339,7 +341,7 @@
   }
 
   .app-tab {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     padding: 4px 12px;
     border-radius: 5px;
@@ -352,7 +354,7 @@
   }
 
   .app-filename {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 12px;
     color: #666;
     margin-right: auto;
@@ -377,7 +379,7 @@
   .md-meta-summary {
     background: #1E1E1E;
     padding: 8px 14px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 10px;
     color: rgba(255,255,255,0.3);
     letter-spacing: 0.05em;
@@ -392,7 +394,7 @@
   .md-meta-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
   }
 
@@ -417,7 +419,7 @@
 
   .md-h1::before {
     content: '#';
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 14px;
     color: var(--accent);
     opacity: 0.7;
@@ -442,7 +444,7 @@
 
   .md-h2::before {
     content: '##';
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--accent);
     opacity: 0.5;
@@ -453,7 +455,7 @@
     border: 0.5px solid rgba(255,255,255,0.08);
     border-radius: 6px;
     padding: 12px 16px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 12px;
     color: #AAA;
     margin: 10px 0 16px;
@@ -471,7 +473,7 @@
   }
 
   .md-tag {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     background: rgba(61,126,245,0.1);
     color: #6B9FFF;
@@ -490,7 +492,7 @@
     border: 0.5px solid rgba(255,255,255,0.07);
     border-radius: 6px;
     padding: 14px 16px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: #555;
     line-height: 1.7;
@@ -501,7 +503,7 @@
   /* state 3: macOS default */
   .app-body-plain {
     padding: 28px 32px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 12px;
     color: #888;
     line-height: 1.8;
@@ -535,7 +537,7 @@
   }
 
   .install-label {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.1em;
@@ -566,12 +568,12 @@
   .install-method {
     font-size: 13px;
     font-weight: 500;
-    color: var(--white);
+    color: var(--fg);
     margin-bottom: 4px;
   }
 
   .install-cmd {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 12px;
     color: var(--muted);
   }
@@ -636,7 +638,7 @@
   }
 
   .section-label {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.1em;
@@ -664,7 +666,7 @@
   .feature:hover { background: var(--card-bg); }
 
   .feature-icon {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 18px;
     color: var(--accent);
     margin-bottom: 16px;
@@ -674,7 +676,7 @@
   .feature-title {
     font-size: 15px;
     font-weight: 500;
-    color: var(--white);
+    color: var(--fg);
     margin-bottom: 8px;
   }
 
@@ -682,74 +684,6 @@
     font-size: 13px;
     color: var(--muted);
     line-height: 1.6;
-  }
-
-  /* SOCIAL PROOF */
-  .social {
-    position: relative;
-    z-index: 1;
-    padding: 80px 40px 100px;
-    max-width: 1000px;
-    margin: 0 auto;
-  }
-
-  .social-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-  }
-
-  .quote-card {
-    background: var(--card-bg);
-    border: 0.5px solid var(--card-border);
-    border-radius: 12px;
-    padding: 20px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    transition: border-color 0.2s;
-  }
-
-  .quote-card:hover { border-color: var(--fg-muted); }
-  .quote-card.span2 { grid-column: span 2; }
-
-  .quote-source {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .source-badge {
-    font-family: 'Berkeley Mono', monospace;
-    font-size: 10px;
-    padding: 3px 8px;
-    border-radius: 4px;
-    letter-spacing: 0.04em;
-  }
-
-  .badge-hn  { background: rgba(255,102,0,0.12); color: #FF6600; border: 0.5px solid rgba(255,102,0,0.2); }
-  .badge-bsky { background: rgba(0,133,255,0.1); color: #0085FF; border: 0.5px solid rgba(0,133,255,0.2); }
-
-  .source-user {
-    font-size: 12px;
-    color: var(--muted);
-    font-family: 'Berkeley Mono', monospace;
-  }
-
-  .quote-text {
-    font-size: 14px;
-    color: var(--fg-muted);
-    line-height: 1.65;
-    font-weight: 300;
-  }
-
-  .quote-text strong { color: var(--fg); font-weight: 500; }
-
-  .quote-meta {
-    font-size: 11px;
-    color: var(--fg-subtle);
-    font-family: 'Berkeley Mono', monospace;
-    margin-top: auto;
   }
 
   /* CTA */
@@ -809,7 +743,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 13px;
     color: var(--muted);
     text-decoration: none;
@@ -851,7 +785,7 @@
   }
 
   .fm-eyebrow {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: var(--teal);
     letter-spacing: 0.1em;
@@ -877,12 +811,12 @@
   }
 
   .fm-desc code {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 12px;
-    background: rgba(255,255,255,0.06);
+    background: var(--grid-line);
     padding: 1px 6px;
     border-radius: 4px;
-    color: rgba(255,255,255,0.5);
+    color: var(--fg-muted);
   }
 
   .fm-visual {
@@ -894,9 +828,9 @@
   .fm-before, .fm-after { flex: 1; }
 
   .fm-visual-label {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 10px;
-    color: rgba(255,255,255,0.2);
+    color: var(--fg-subtle);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     margin-bottom: 8px;
@@ -907,7 +841,7 @@
     border: 0.5px solid rgba(255,255,255,0.08);
     border-radius: 8px;
     padding: 16px;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     line-height: 1.7;
     white-space: pre;
@@ -919,9 +853,9 @@
   .fm-body  { color: #444; }
 
   .fm-arrow {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 16px;
-    color: rgba(255,255,255,0.15);
+    color: var(--fg-subtle);
     padding-top: 48px;
     flex-shrink: 0;
   }
@@ -953,7 +887,7 @@
   }
 
   .fm-summary-text {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 9px;
     color: rgba(255,255,255,0.3);
     letter-spacing: 0.06em;
@@ -963,7 +897,7 @@
   .fm-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 10px;
   }
 
@@ -983,14 +917,14 @@
   }
 
   .fm-rendered-h1 {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: rgba(255,255,255,0.5);
     margin-bottom: 6px;
   }
 
   .fm-rendered-dots {
-    font-family: 'Berkeley Mono', monospace;
+    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
     color: rgba(255,255,255,0.1);
   }
@@ -1000,23 +934,12 @@
     .fm-section { padding: 60px 20px; }
   }
 
-  /* THEME TOGGLE */
-  .theme-toggle {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: 0.5px solid var(--ghost-bdr);
-    background: transparent;
-    color: var(--fg-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.2s, border-color 0.2s;
-    flex-shrink: 0;
+  /* focus-visible for keyboard nav */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
   }
-  .theme-toggle:hover { color: var(--fg); border-color: var(--fg-muted); }
-  .theme-toggle svg { display: block; }
 
   .app-inner-bar {
     background: #1A1A1A;
@@ -1043,9 +966,6 @@
     .install-row { flex-direction: column; align-items: flex-start; }
     .features { padding: 60px 20px 80px; }
     .features-grid { grid-template-columns: 1fr; }
-    .social { padding: 60px 20px 80px; }
-    .social-grid { grid-template-columns: 1fr; }
-    .quote-card.span2 { grid-column: span 1; }
     .cta-section { padding: 80px 20px; }
     footer { padding: 24px 20px; flex-direction: column; gap: 16px; text-align: center; }
   }
@@ -1069,10 +989,6 @@
     <li><a href="#install">install</a></li>
     <li><a href="https://github.com/johannesnagl/show.md">github</a></li>
   </ul>
-  <button class="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
-    <svg id="icon-moon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 8.5A5.5 5.5 0 0 1 5.5 1.5a5.5 5.5 0 1 0 7 7Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <svg id="icon-sun" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none"><circle cx="7" cy="7" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-  </button>
   <a href="https://github.com/johannesnagl/show.md/releases/latest" class="nav-cta">Download free</a>
 </nav>
 
@@ -1117,7 +1033,7 @@
     <div class="preview-switcher">
       <button class="preview-btn active showmd" data-state="0">With Show.md</button>
       <button class="preview-btn other" data-state="1">With other apps</button>
-      <button class="preview-btn macos" data-state="2">Default Mac OS</button>
+      <button class="preview-btn macos" data-state="2">Default macOS</button>
     </div>
 
     <div class="app-frame">
@@ -1163,11 +1079,7 @@
       <!-- State 2: With other apps -->
       <div class="app-state" id="state-other">
         <div class="app-body-other">
-          <pre class="md-raw-frontmatter">---
-title: Agent instructions
-tags: [agent, config, v2]
-version: 2.1
----</pre>
+          <p class="md-p" style="color:#555;">— title: Agent instructions tags: [agent, config, v2] version: 2.1 —</p>
           <div class="md-h1">Agent instructions</div>
           <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
           <div class="md-h2">Commands</div>
@@ -1175,7 +1087,7 @@ version: 2.1
         </div>
       </div>
 
-      <!-- State 3: Default Mac OS -->
+      <!-- State 3: Default macOS -->
       <div class="app-state" id="state-macos">
         <div class="app-body-plain">---
 title: Agent instructions
@@ -1264,32 +1176,32 @@ $ npm run build · npm test · npm run lint</div>
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">⚡</div>
-        <div class="feature-title">Instant open</div>
+        <h3 class="feature-title">Instant open</h3>
         <p class="feature-desc">Set as default for .md files. Spacebar to preview in Finder. Zero friction.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">⌘</div>
-        <div class="feature-title">macOS native</div>
+        <h3 class="feature-title">macOS native</h3>
         <p class="feature-desc">Feels like it belongs. Respects system fonts, dark mode, and your keyboard.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">≡</div>
-        <div class="feature-title">Frontmatter rendering</div>
+        <h3 class="feature-title">Frontmatter rendering</h3>
         <p class="feature-desc">YAML metadata rendered as a collapsible table. Collapsed by default, one click to expand. Unique to show.md.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">◎</div>
-        <div class="feature-title">No bloat</div>
+        <h3 class="feature-title">No bloat</h3>
         <p class="feature-desc">Not an editor. Not a note app. Just a viewer. Opens in under a second.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">⇄</div>
-        <div class="feature-title">Rendered &amp; source</div>
+        <h3 class="feature-title">Rendered &amp; source</h3>
         <p class="feature-desc">Switch between rendered and raw markdown with a single click. Copy as HTML anytime.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">⬡</div>
-        <div class="feature-title">Private by default</div>
+        <h3 class="feature-title">Private by default</h3>
         <p class="feature-desc">No cloud. No uploads. No telemetry. Your files never leave your machine.</p>
       </div>
     </div>
@@ -1301,10 +1213,10 @@ $ npm run build · npm test · npm run lint</div>
     <div class="install-options">
       <div class="install-row">
         <div class="install-row-left">
-          <div class="install-method">Homebrew</div>
+          <div class="install-method">Homebrew <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">coming soon</span></div>
           <div class="install-cmd"><em>brew install --cask</em> show-md</div>
         </div>
-        <a href="https://github.com/johannesnagl/show.md" class="install-btn ghost">copy</a>
+        <button class="install-btn ghost" id="copy-brew" onclick="this.textContent='copied!';navigator.clipboard.writeText('brew install --cask show-md');setTimeout(()=>this.textContent='copy',2000)">copy</button>
       </div>
       <div class="install-row">
         <div class="install-row-left">
@@ -1323,59 +1235,6 @@ $ npm run build · npm test · npm run lint</div>
     </div>
   </section>
 
-  <!-- SOCIAL PROOF -->
-  <section class="social">
-    <p class="section-label">from the community</p>
-    <div class="social-grid">
-
-      <div class="quote-card span2">
-        <div class="quote-source">
-          <span class="source-badge badge-hn">HN</span>
-          <span class="source-user">trondhansen</span>
-        </div>
-        <p class="quote-text">I've been looking for exactly this for months. Every time an AI agent drops a CLAUDE.md or AGENTS.md in my repo I end up reading it in VS Code which feels like overkill. <strong>showmd opens instantly and gets out of the way.</strong> That's all I wanted.</p>
-        <span class="quote-meta">ask hn: what's your markdown workflow · 847 points</span>
-      </div>
-
-      <div class="quote-card">
-        <div class="quote-source">
-          <span class="source-badge badge-bsky">bsky</span>
-          <span class="source-user">@miriamkl.dev</span>
-        </div>
-        <p class="quote-text">ok <strong>showmd</strong> is actually just perfect. spacebar preview in finder, renders everything correctly, dark mode works. how is this free</p>
-        <span class="quote-meta">2 days ago · 34 likes</span>
-      </div>
-
-      <div class="quote-card">
-        <div class="quote-source">
-          <span class="source-badge badge-hn">HN</span>
-          <span class="source-user">quietcompiler</span>
-        </div>
-        <p class="quote-text">The raw toggle feature is understated but brilliant. I constantly need to check the actual markdown syntax, not just the render. <strong>One click.</strong> Done.</p>
-        <span class="quote-meta">show hn thread · 3 days ago</span>
-      </div>
-
-      <div class="quote-card">
-        <div class="quote-source">
-          <span class="source-badge badge-bsky">bsky</span>
-          <span class="source-user">@felix.codes</span>
-        </div>
-        <p class="quote-text">the indie hacker tools that come out of the AI agent era are wild. showmd solves a problem i didn't know i had until i used it once.</p>
-        <span class="quote-meta">yesterday · 61 likes</span>
-      </div>
-
-      <div class="quote-card span2">
-        <div class="quote-source">
-          <span class="source-badge badge-hn">HN</span>
-          <span class="source-user">velvetbyte</span>
-        </div>
-        <p class="quote-text">Replaced my habit of <code style="font-family:'Berkeley Mono',monospace;font-size:12px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;">cat README.md | less</code> in the terminal. Native, fast, renders tables properly. <strong>Exactly the scope it should be</strong> — not an editor, not Obsidian, just a viewer.</p>
-        <span class="quote-meta">show hn: showmd — a markdown viewer for macos · 5 days ago</span>
-      </div>
-
-    </div>
-  </section>
-
   <!-- CTA -->
   <section class="cta-section">
     <h2 class="cta-title">Open your next .md file<br><em>the right way.</em></h2>
@@ -1387,7 +1246,7 @@ $ npm run build · npm test · npm run lint</div>
       </a>
       <a href="https://github.com/johannesnagl/show.md" class="btn-secondary">view on GitHub →</a>
     </div>
-    <a href="https://buymeacoffee.com/johannesnagl" class="cta-pasta">buy me a pasta ☕</a>
+    <a href="https://buymeacoffee.com/johannesnagl" class="cta-pasta">buy me a pasta 🍝</a>
   </section>
 
 </main>
@@ -1411,50 +1270,19 @@ $ npm run build · npm test · npm run lint</div>
 </footer>
 
 <script>
-// Theme toggle
+// Apply theme from localStorage or system preference before paint
 (function() {
-  var html = document.documentElement;
-  var btn = document.getElementById('theme-toggle');
-  var iconMoon = document.getElementById('icon-moon');
-  var iconSun = document.getElementById('icon-sun');
-
-  function systemIsDark() {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  }
-
-  function effectiveTheme() {
-    var stored = localStorage.getItem('theme');
-    if (stored) return stored;
-    return systemIsDark() ? 'dark' : 'light';
-  }
-
-  function applyTheme(theme) {
-    if (theme === 'light') {
-      html.setAttribute('data-theme', 'light');
-      iconMoon.style.display = 'block';
-      iconSun.style.display = 'none';
-    } else {
-      html.setAttribute('data-theme', 'dark');
-      iconMoon.style.display = 'none';
-      iconSun.style.display = 'block';
+  var stored = localStorage.getItem('theme');
+  var theme = stored || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!localStorage.getItem('theme')) {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
     }
-  }
-
-  applyTheme(effectiveTheme());
-
-  btn.addEventListener('click', function() {
-    var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', next);
-    applyTheme(next);
-  });
-
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
-    if (!localStorage.getItem('theme')) applyTheme(systemIsDark() ? 'dark' : 'light');
   });
 })();
-</script>
 
-<script>
+// Preview state switcher with auto-cycle (pauses on manual interaction)
 (function() {
   const stateIds = ['state-showmd', 'state-other', 'state-macos'];
   const btns = document.querySelectorAll('.preview-btn');
@@ -1474,17 +1302,14 @@ $ npm run build · npm test · npm run lint</div>
 
   function startCycle() {
     clearInterval(timer);
-    timer = setInterval(function() {
-      showState((current + 1) % 3);
-    }, 3500);
+    timer = setInterval(() => showState((current + 1) % 3), 3500);
   }
 
-  // Buttons always carry their color class
   btns.forEach(function(btn, i) {
     btn.classList.add(btnClasses[i]);
     btn.addEventListener('click', function() {
+      clearInterval(timer); // pause on manual interaction
       showState(i);
-      startCycle();
     });
   });
 
