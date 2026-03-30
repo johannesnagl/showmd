@@ -26,6 +26,8 @@ targets:
         INFOPLIST_FILE: ShowMd/Info.plist
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: ShowMd/ShowMd.entitlements
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0.0"
     dependencies:
       - package: MarkdownRenderer
       - target: ShowMdExtension
@@ -44,5 +46,7 @@ targets:
         INFOPLIST_FILE: ShowMdExtension/Info.plist
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_ENTITLEMENTS: ShowMdExtension/ShowMdExtension.entitlements
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0.0"
     dependencies:
       - package: MarkdownRenderer
