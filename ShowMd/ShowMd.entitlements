@@ -3,10 +3,6 @@
 <plist version="1.0">
 <dict>
     <key>com.apple.security.app-sandbox</key>
-    <true/>
-    <key>com.apple.security.application-groups</key>
-    <array>
-        <string>group.io.github.show-md</string>
-    </array>
+    <false/>
 </dict>
 </plist>

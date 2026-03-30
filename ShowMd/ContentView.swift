@@ -3,10 +3,27 @@ import struct MarkdownRenderer.Settings
 
 private typealias MdSettings = Settings
 
+private let extensionBundleID = "io.github.showmd.app.extension"
+
+private func isExtensionEnabled() -> Bool {
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
+    process.arguments = ["-m", "-p", "com.apple.quicklook.preview", "-i", extensionBundleID]
+    let pipe = Pipe()
+    process.standardOutput = pipe
+    process.standardError = Pipe()
+    try? process.run()
+    process.waitUntilExit()
+    let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+    // pluginkit prefixes enabled extensions with "+" and disabled with "-"
+    return output.contains("+")
+}
+
 struct ContentView: View {
     @State private var defaultTab: MdSettings.Tab = MdSettings.defaultTab
     @State private var theme: MdSettings.Theme = MdSettings.theme
     @State private var fontSize: MdSettings.FontSize = MdSettings.fontSize
+    @State private var extensionEnabled: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -17,6 +34,11 @@ struct ContentView: View {
         .onChange(of: defaultTab) { _, newValue in MdSettings.defaultTab = newValue }
         .onChange(of: theme)      { _, newValue in MdSettings.theme = newValue }
         .onChange(of: fontSize)   { _, newValue in MdSettings.fontSize = newValue }
+        .preferredColorScheme(theme == .light ? .light : theme == .dark ? .dark : nil)
+        .onAppear { extensionEnabled = isExtensionEnabled() }
+        .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
+            extensionEnabled = isExtensionEnabled()
+        }
     }
 
     private var headerView: some View {
@@ -42,9 +64,14 @@ struct ContentView: View {
         Form {
             Section("Preview") {
                 HStack {
-                    Text("Quick Look Extension")
+                    Label {
+                        Text("Quick Look Extension")
+                    } icon: {
+                        Image(systemName: extensionEnabled ? "checkmark.circle.fill" : "xmark.circle.fill")
+                            .foregroundStyle(extensionEnabled ? .green : .red)
+                    }
                     Spacer()
-                    Button("Open in System Settings") {
+                    Button(extensionEnabled ? "Manage in Settings" : "Enable Extension") {
                         if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
                             NSWorkspace.shared.open(url)
                         }
