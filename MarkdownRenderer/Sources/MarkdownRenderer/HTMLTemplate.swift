@@ -31,7 +31,7 @@ public enum HTMLTemplate {
         """
     }
 
-    static let css = """
+    private static let css = """
         :root {
           --bg: #ffffff;
           --text: #1a1a1a;
