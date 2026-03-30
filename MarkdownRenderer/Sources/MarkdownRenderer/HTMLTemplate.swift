@@ -33,46 +33,16 @@ public enum HTMLTemplate {
         \(css)
           html.tab-source  .view-rendered { display: none; }
           html.tab-rendered .view-source  { display: none; }
-          html.tab-source  .action-bar    { display: none; }
           .view-source { padding: 16px; }
           .view-source pre {
             margin: 0; word-wrap: break-word; white-space: pre-wrap;
             font-size: 1em; border-radius: 0; padding: 0; background: none;
           }
-          .action-bar {
-            position: fixed; top: 10px; right: 12px;
-            display: flex; gap: 6px; z-index: 100;
-          }
-          .action-bar button {
-            font-family: -apple-system, sans-serif;
-            font-size: 11px; font-weight: 500;
-            padding: 4px 10px; border-radius: 5px; cursor: pointer;
-            border: 1px solid var(--border);
-            background: var(--code-bg); color: var(--text);
-            opacity: 0.7; transition: opacity 0.15s;
-          }
-          .action-bar button:hover { opacity: 1; }
-          @media print { .action-bar { display: none !important; } }
           </style>
         </head>
         <body>
-          <div class="action-bar">
-            <button onclick="copyHTML()">Copy as HTML</button>
-            <button onclick="window.print()">Print</button>
-          </div>
           <div class="view-rendered">\(renderedBody)</div>
           <div class="view-source">\(sourceBody)</div>
-          <script>
-          function copyHTML() {
-            var content = document.querySelector('.view-rendered').innerHTML;
-            navigator.clipboard.writeText(content).catch(function() {
-              var ta = document.createElement('textarea');
-              ta.value = content; document.body.appendChild(ta);
-              ta.select(); document.execCommand('copy');
-              document.body.removeChild(ta);
-            });
-          }
-          </script>
         </body>
         </html>
         """

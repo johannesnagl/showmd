@@ -6,6 +6,8 @@ import MarkdownRenderer
 class PreviewViewController: NSViewController, QLPreviewingController {
     private var webView: WKWebView?
     private var segmentedControl: NSSegmentedControl!
+    private var copyButton: NSButton!
+    private var printButton: NSButton!
     private var markdownSource = ""
     private var currentTab: Settings.Tab = Settings.defaultTab
 
@@ -21,17 +23,35 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         segmentedControl.selectedSegment = currentTab == .rendered ? 0 : 1
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
 
+        copyButton = NSButton(title: "Copy as HTML", target: self, action: #selector(copyAsHTML))
+        copyButton.bezelStyle = .rounded
+        copyButton.controlSize = .small
+        copyButton.translatesAutoresizingMaskIntoConstraints = false
+
+        printButton = NSButton(title: "Print", target: self, action: #selector(printDocument))
+        printButton.bezelStyle = .rounded
+        printButton.controlSize = .small
+        printButton.translatesAutoresizingMaskIntoConstraints = false
+
         let config = WKWebViewConfiguration()
         let wv = WKWebView(frame: .zero, configuration: config)
         wv.translatesAutoresizingMaskIntoConstraints = false
         webView = wv
 
         view.addSubview(segmentedControl)
+        view.addSubview(copyButton)
+        view.addSubview(printButton)
         view.addSubview(wv)
 
         NSLayoutConstraint.activate([
             segmentedControl.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
             segmentedControl.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            printButton.centerYAnchor.constraint(equalTo: segmentedControl.centerYAnchor),
+            printButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -12),
+
+            copyButton.centerYAnchor.constraint(equalTo: segmentedControl.centerYAnchor),
+            copyButton.trailingAnchor.constraint(equalTo: printButton.leadingAnchor, constant: -6),
 
             wv.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8),
             wv.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -49,6 +69,9 @@ class PreviewViewController: NSViewController, QLPreviewingController {
                 DispatchQueue.main.async {
                     self.currentTab = Settings.defaultTab
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
+                    let showButtons = self.currentTab == .rendered
+                    self.copyButton?.isHidden = !showButtons
+                    self.printButton?.isHidden = !showButtons
                     self.markdownSource = source
                     self.loadCombined()
                     handler(nil)
@@ -63,6 +86,22 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         currentTab = sender.selectedSegment == 0 ? .rendered : .source
         let cls = currentTab == .rendered ? "tab-rendered" : "tab-source"
         webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'")
+        let showButtons = currentTab == .rendered
+        copyButton.isHidden = !showButtons
+        printButton.isHidden = !showButtons
+    }
+
+    @objc private func copyAsHTML() {
+        webView?.evaluateJavaScript("document.querySelector('.view-rendered').innerHTML") { result, _ in
+            if let html = result as? String {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(html, forType: .html)
+            }
+        }
+    }
+
+    @objc private func printDocument() {
+        webView?.evaluateJavaScript("window.print()")
     }
 
     private func loadCombined() {
