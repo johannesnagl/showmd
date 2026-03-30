@@ -21,17 +21,67 @@
     --teal: #1D9E75;
     --border: rgba(255,255,255,0.08);
     --border-light: rgba(0,0,0,0.08);
+    /* theme tokens — dark default */
+    --bg:          #0A0A0A;
+    --fg:          #FFFFFF;
+    --fg-muted:    #888880;
+    --fg-subtle:   rgba(255,255,255,0.2);
+    --card-bg:     #111111;
+    --card-border: rgba(255,255,255,0.07);
+    --nav-bg:      rgba(10,10,10,0.7);
+    --grid-line:   rgba(255,255,255,0.06);
+    --tagline-dim: rgba(255,255,255,0.15);
+    --badge-bdr:   rgba(255,255,255,0.12);
+    --ghost-bdr:   rgba(255,255,255,0.12);
+    --noise-op:    0.4;
+  }
+
+  html[data-theme="light"] {
+    --bg:          #F5F5F3;
+    --fg:          #0A0A0A;
+    --fg-muted:    #666660;
+    --fg-subtle:   rgba(0,0,0,0.25);
+    --card-bg:     #EAEAE8;
+    --card-border: rgba(0,0,0,0.07);
+    --nav-bg:      rgba(245,245,243,0.85);
+    --grid-line:   rgba(0,0,0,0.06);
+    --tagline-dim: rgba(0,0,0,0.12);
+    --badge-bdr:   rgba(0,0,0,0.12);
+    --ghost-bdr:   rgba(0,0,0,0.15);
+    --muted:       #777770;
+    --border:      rgba(0,0,0,0.08);
+    --noise-op:    0.15;
+  }
+
+  @media (prefers-color-scheme: light) {
+    html:not([data-theme="dark"]) {
+      --bg:          #F5F5F3;
+      --fg:          #0A0A0A;
+      --fg-muted:    #666660;
+      --fg-subtle:   rgba(0,0,0,0.25);
+      --card-bg:     #EAEAE8;
+      --card-border: rgba(0,0,0,0.07);
+      --nav-bg:      rgba(245,245,243,0.85);
+      --grid-line:   rgba(0,0,0,0.06);
+      --tagline-dim: rgba(0,0,0,0.12);
+      --badge-bdr:   rgba(0,0,0,0.12);
+      --ghost-bdr:   rgba(0,0,0,0.15);
+      --muted:       #777770;
+      --border:      rgba(0,0,0,0.08);
+      --noise-op:    0.15;
+    }
   }
 
   html { scroll-behavior: smooth; }
 
   body {
     font-family: 'DM Sans', sans-serif;
-    background: var(--ink);
-    color: var(--white);
+    background: var(--bg);
+    color: var(--fg);
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
+    transition: background 0.25s, color 0.25s;
   }
 
   body::before {
@@ -41,7 +91,8 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: 0;
-    opacity: 0.4;
+    opacity: var(--noise-op);
+    transition: opacity 0.25s;
   }
 
   /* NAV */
@@ -55,7 +106,8 @@
     justify-content: space-between;
     border-bottom: 0.5px solid var(--border);
     backdrop-filter: blur(12px);
-    background: rgba(10,10,10,0.7);
+    background: var(--nav-bg);
+    transition: background 0.25s;
   }
 
   .nav-logo {
@@ -125,7 +177,7 @@
     font-family: 'Berkeley Mono', monospace;
     font-size: 11px;
     color: var(--muted);
-    border: 0.5px solid rgba(255,255,255,0.12);
+    border: 0.5px solid var(--badge-bdr);
     padding: 6px 14px;
     border-radius: 100px;
     margin-bottom: 40px;
@@ -204,7 +256,7 @@
     margin-top: 16px;
     font-family: 'Berkeley Mono', monospace;
     font-size: 11px;
-    color: rgba(255,255,255,0.2);
+    color: var(--fg-subtle);
     letter-spacing: 0.04em;
     opacity: 0;
     animation: fadeUp 0.7s 0.65s forwards;
@@ -501,8 +553,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #111;
-    border: 0.5px solid rgba(255,255,255,0.07);
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
     border-radius: 10px;
     padding: 14px 20px;
     gap: 16px;
@@ -544,10 +596,10 @@
   .install-btn.ghost {
     background: transparent;
     color: var(--muted);
-    border: 0.5px solid rgba(255,255,255,0.12);
+    border: 0.5px solid var(--ghost-bdr);
   }
 
-  .install-btn.ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+  .install-btn.ghost:hover { color: var(--fg); border-color: var(--fg-muted); }
 
   /* TAGLINE SECTION */
   .tagline-section {
@@ -563,7 +615,7 @@
     font-size: clamp(28px, 5vw, 52px);
     font-weight: 300;
     font-style: italic;
-    color: rgba(255,255,255,0.15);
+    color: var(--tagline-dim);
     line-height: 1.2;
     letter-spacing: -0.02em;
   }
@@ -571,7 +623,7 @@
   .tagline-big strong {
     font-weight: 400;
     font-style: normal;
-    color: var(--white);
+    color: var(--fg);
   }
 
   /* FEATURES */
@@ -597,19 +649,19 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    background: rgba(255,255,255,0.06);
-    border: 0.5px solid rgba(255,255,255,0.06);
+    background: var(--grid-line);
+    border: 0.5px solid var(--grid-line);
     border-radius: 16px;
     overflow: hidden;
   }
 
   .feature {
-    background: var(--ink);
+    background: var(--bg);
     padding: 32px 28px;
     transition: background 0.2s;
   }
 
-  .feature:hover { background: #111; }
+  .feature:hover { background: var(--card-bg); }
 
   .feature-icon {
     font-family: 'Berkeley Mono', monospace;
@@ -648,8 +700,8 @@
   }
 
   .quote-card {
-    background: #111;
-    border: 0.5px solid rgba(255,255,255,0.07);
+    background: var(--card-bg);
+    border: 0.5px solid var(--card-border);
     border-radius: 12px;
     padding: 20px 22px;
     display: flex;
@@ -658,7 +710,7 @@
     transition: border-color 0.2s;
   }
 
-  .quote-card:hover { border-color: rgba(255,255,255,0.15); }
+  .quote-card:hover { border-color: var(--fg-muted); }
   .quote-card.span2 { grid-column: span 2; }
 
   .quote-source {
@@ -686,16 +738,16 @@
 
   .quote-text {
     font-size: 14px;
-    color: rgba(255,255,255,0.75);
+    color: var(--fg-muted);
     line-height: 1.65;
     font-weight: 300;
   }
 
-  .quote-text strong { color: var(--white); font-weight: 500; }
+  .quote-text strong { color: var(--fg); font-weight: 500; }
 
   .quote-meta {
     font-size: 11px;
-    color: rgba(255,255,255,0.18);
+    color: var(--fg-subtle);
     font-family: 'Berkeley Mono', monospace;
     margin-top: auto;
   }
@@ -735,7 +787,7 @@
 
   .cta-pasta {
     font-size: 13px;
-    color: rgba(255,255,255,0.25);
+    color: var(--fg-subtle);
     text-decoration: none;
     transition: color 0.2s;
   }
@@ -763,7 +815,7 @@
     text-decoration: none;
   }
 
-  .footer-logo span { color: rgba(255,255,255,0.3); }
+  .footer-logo span { color: var(--fg-subtle); }
 
   .footer-links {
     display: flex;
@@ -773,7 +825,7 @@
 
   .footer-links a {
     font-size: 12px;
-    color: rgba(255,255,255,0.2);
+    color: var(--fg-subtle);
     text-decoration: none;
     transition: color 0.2s;
   }
@@ -948,6 +1000,24 @@
     .fm-section { padding: 60px 20px; }
   }
 
+  /* THEME TOGGLE */
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: 0.5px solid var(--ghost-bdr);
+    background: transparent;
+    color: var(--fg-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { color: var(--fg); border-color: var(--fg-muted); }
+  .theme-toggle svg { display: block; }
+
   .app-inner-bar {
     background: #1A1A1A;
     padding: 8px 16px;
@@ -999,6 +1069,10 @@
     <li><a href="#install">install</a></li>
     <li><a href="https://github.com/johannesnagl/show.md">github</a></li>
   </ul>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
+    <svg id="icon-moon" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.5 8.5A5.5 5.5 0 0 1 5.5 1.5a5.5 5.5 0 1 0 7 7Z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <svg id="icon-sun" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none"><circle cx="7" cy="7" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.93 2.93l1.06 1.06M10.01 10.01l1.06 1.06M2.93 11.07l1.06-1.06M10.01 3.99l1.06-1.06" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+  </button>
   <a href="https://github.com/johannesnagl/show.md/releases/latest" class="nav-cta">Download free</a>
 </nav>
 
@@ -1335,6 +1409,50 @@ $ npm run build · npm test · npm run lint</div>
     <li><a href="https://buymeacoffee.com/johannesnagl">buy me a pasta</a></li>
   </ul>
 </footer>
+
+<script>
+// Theme toggle
+(function() {
+  var html = document.documentElement;
+  var btn = document.getElementById('theme-toggle');
+  var iconMoon = document.getElementById('icon-moon');
+  var iconSun = document.getElementById('icon-sun');
+
+  function systemIsDark() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+
+  function effectiveTheme() {
+    var stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return systemIsDark() ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      html.setAttribute('data-theme', 'light');
+      iconMoon.style.display = 'block';
+      iconSun.style.display = 'none';
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      iconMoon.style.display = 'none';
+      iconSun.style.display = 'block';
+    }
+  }
+
+  applyTheme(effectiveTheme());
+
+  btn.addEventListener('click', function() {
+    var next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', next);
+    applyTheme(next);
+  });
+
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+    if (!localStorage.getItem('theme')) applyTheme(systemIsDark() ? 'dark' : 'light');
+  });
+})();
+</script>
 
 <script>
 (function() {
