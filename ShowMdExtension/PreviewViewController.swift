@@ -11,6 +11,23 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     private var renderedHTML = ""
     private var currentTab: Settings.Tab = Settings.defaultTab
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(settingsChanged),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
+    }
+
+    @objc private func settingsChanged() {
+        guard !markdownSource.isEmpty else { return }
+        let cls = currentTab == .rendered ? "tab-rendered" : "tab-source"
+        loadCombined()
+        webView?.evaluateJavaScript("document.documentElement.className = '\(cls)'")
+    }
+
     override func loadView() {
         view = NSView(frame: NSRect(x: 0, y: 0, width: 800, height: 600))
 
