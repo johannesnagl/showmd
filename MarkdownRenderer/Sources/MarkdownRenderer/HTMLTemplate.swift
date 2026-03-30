@@ -69,9 +69,11 @@ public enum HTMLTemplate {
         let rows = fields.map { field in
             "<tr><th>\(field.key)</th><td>\(field.value)</td></tr>"
         }.joined(separator: "\n")
+        let count = fields.count
+        let noun = count == 1 ? "key" : "keys"
         return """
         <details class="frontmatter">
-          <summary>Frontmatter</summary>
+          <summary>Frontmatter<span class="fm-count"> · \(count) \(noun)</span></summary>
           <table>\(rows)</table>
         </details>
         """
@@ -207,5 +209,6 @@ public enum HTMLTemplate {
           font-size: 0.85em;
         }
         details.frontmatter th { width: 30%; }
+        details.frontmatter[open] .fm-count { display: none; }
         """
 }
