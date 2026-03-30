@@ -95,6 +95,12 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     @objc private func copyAsHTML() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(renderedHTML, forType: .string)
+        copyButton.title = "Copied!"
+        copyButton.isEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.copyButton.title = "Copy as HTML"
+            self?.copyButton.isEnabled = true
+        }
     }
 
     @objc private func printDocument() {
