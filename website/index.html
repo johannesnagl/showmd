@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>show.md — markdown was never meant to stay raw</title>
+<meta name="description" content="A native macOS Quick Look extension that renders Markdown beautifully. Free, private, no account needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0A0A0A;
+    --ink2: #1C1C1C;
+    --paper: #F5F5F3;
+    --white: #FFFFFF;
+    --muted: #888880;
+    --muted2: #BBBBB5;
+    --accent: #3D7EF5;
+    --teal: #1D9E75;
+    --border: rgba(255,255,255,0.08);
+    --border-light: rgba(0,0,0,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--ink);
+    color: var(--white);
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 0.5px solid var(--border);
+    backdrop-filter: blur(12px);
+    background: rgba(10,10,10,0.7);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 15px;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--muted); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--white);
+    color: var(--ink);
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 40px 80px;
+  }
+
+  .hero-icon {
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0s forwards;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    border: 0.5px solid rgba(255,255,255,0.12);
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 40px;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s forwards;
+  }
+
+  .hero-badge-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+
+  .hero-title {
+    font-size: clamp(42px, 7vw, 80px);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 800px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.25s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--muted);
+  }
+
+  .hero-tagline {
+    margin-top: 24px;
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--muted);
+    font-style: italic;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s forwards;
+  }
+
+  .hero-actions {
+    margin-top: 44px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.55s forwards;
+  }
+
+  .btn-primary {
+    font-size: 14px;
+    font-weight: 500;
+    background: var(--white);
+    color: var(--ink);
+    padding: 12px 24px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  .btn-secondary {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .btn-secondary:hover { color: var(--white); }
+
+  .hero-meta {
+    margin-top: 16px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 0.04em;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
+  }
+
+  /* APP PREVIEW */
+  .preview {
+    position: relative;
+    z-index: 1;
+    padding: 0 40px 120px;
+    display: flex;
+    justify-content: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .app-frame {
+    width: 100%;
+    max-width: 760px;
+    background: #161616;
+    border-radius: 16px;
+    border: 0.5px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .app-titlebar {
+    background: #1A1A1A;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-r { background: #FF5F57; }
+  .dot-y { background: #FFBD2E; }
+  .dot-g { background: #28C840; }
+
+  .app-tabs {
+    display: flex;
+    gap: 6px;
+    margin: 0 auto;
+  }
+
+  .app-tab {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 5px;
+    color: var(--muted);
+  }
+
+  .app-tab.active {
+    background: rgba(61,126,245,0.15);
+    color: #6B9FFF;
+  }
+
+  .app-filename {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 12px;
+    color: #666;
+    margin-right: auto;
+  }
+
+  .app-body {
+    padding: 32px 40px;
+  }
+
+  .md-h1 {
+    font-size: 22px;
+    font-weight: 500;
+    color: #F0F0EE;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .md-h1::before {
+    content: '#';
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .md-p {
+    font-size: 14px;
+    color: #777;
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .md-h2 {
+    font-size: 15px;
+    font-weight: 500;
+    color: #CCC;
+    margin: 20px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .md-h2::before {
+    content: '##';
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+
+  .md-code {
+    background: #0F0F0F;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 12px;
+    color: #AAA;
+    margin: 10px 0 16px;
+    display: flex;
+    gap: 16px;
+  }
+
+  .md-code span { color: var(--teal); }
+
+  .md-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .md-tag {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    background: rgba(61,126,245,0.1);
+    color: #6B9FFF;
+    border: 0.5px solid rgba(61,126,245,0.2);
+    padding: 3px 10px;
+    border-radius: 4px;
+  }
+
+  /* INSTALL */
+  .install {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px;
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .install-label {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .install-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .install-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #111;
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 14px 20px;
+    gap: 16px;
+    text-align: left;
+  }
+
+  .install-row-left { flex: 1; }
+
+  .install-method {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .install-cmd {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .install-cmd em { color: var(--teal); font-style: normal; }
+
+  .install-btn {
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--white);
+    color: var(--ink);
+    padding: 8px 16px;
+    border-radius: 7px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .install-btn:hover { opacity: 0.85; }
+
+  .install-btn.ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 0.5px solid rgba(255,255,255,0.12);
+  }
+
+  .install-btn.ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.3); }
+
+  /* TAGLINE SECTION */
+  .tagline-section {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px;
+    text-align: center;
+    border-top: 0.5px solid var(--border);
+    border-bottom: 0.5px solid var(--border);
+  }
+
+  .tagline-big {
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.15);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .tagline-big strong {
+    font-weight: 400;
+    font-style: normal;
+    color: var(--white);
+  }
+
+  /* FEATURES */
+  .features {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px 120px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 60px;
+    text-align: center;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    border: 0.5px solid rgba(255,255,255,0.06);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .feature {
+    background: var(--ink);
+    padding: 32px 28px;
+    transition: background 0.2s;
+  }
+
+  .feature:hover { background: #111; }
+
+  .feature-icon {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 18px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+
+  .feature-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* SOCIAL PROOF */
+  .social {
+    position: relative;
+    z-index: 1;
+    padding: 80px 40px 100px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .quote-card {
+    background: #111;
+    border: 0.5px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+
+  .quote-card:hover { border-color: rgba(255,255,255,0.15); }
+  .quote-card.span2 { grid-column: span 2; }
+
+  .quote-source {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .source-badge {
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-hn  { background: rgba(255,102,0,0.12); color: #FF6600; border: 0.5px solid rgba(255,102,0,0.2); }
+  .badge-bsky { background: rgba(0,133,255,0.1); color: #0085FF; border: 0.5px solid rgba(0,133,255,0.2); }
+
+  .source-user {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Berkeley Mono', monospace;
+  }
+
+  .quote-text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .quote-text strong { color: var(--white); font-weight: 500; }
+
+  .quote-meta {
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    font-family: 'Berkeley Mono', monospace;
+    margin-top: auto;
+  }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    text-align: center;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .cta-title {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+
+  .cta-title em { font-style: italic; color: var(--muted); }
+
+  .cta-sub {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 40px;
+  }
+
+  .cta-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .cta-pasta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.25);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .cta-pasta:hover { color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 0.5px solid var(--border);
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Berkeley Mono', monospace;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .footer-logo span { color: rgba(255,255,255,0.3); }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--muted); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    .preview { padding: 0 20px 80px; }
+    .app-body { padding: 20px; }
+    .install { padding: 60px 20px; }
+    .install-row { flex-direction: column; align-items: flex-start; }
+    .features { padding: 60px 20px 80px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .social { padding: 60px 20px 80px; }
+    .social-grid { grid-template-columns: 1fr; }
+    .quote-card.span2 { grid-column: span 1; }
+    .cta-section { padding: 80px 20px; }
+    footer { padding: 24px 20px; flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="14" fill="#222"/>
+      <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
+      <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
+      <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
+      <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+    </svg>
+    <span>show</span>md
+  </a>
+  <ul class="nav-links">
+    <li><a href="#features">features</a></li>
+    <li><a href="#install">install</a></li>
+    <li><a href="https://github.com/johannesnagl/show.md">github</a></li>
+  </ul>
+  <a href="https://github.com/johannesnagl/show.md/releases/latest" class="nav-cta">Download free</a>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-icon">
+      <svg width="72" height="72" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <rect width="64" height="64" rx="14" fill="#161616"/>
+        <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
+        <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
+        <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
+        <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+      </svg>
+    </div>
+
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      macOS · free · no account needed
+    </div>
+
+    <h1 class="hero-title">
+      Markdown was never<br>meant to <em>stay raw.</em>
+    </h1>
+
+    <p class="hero-tagline">The fastest way to open any .md file on macOS.</p>
+
+    <div class="hero-actions">
+      <a href="https://github.com/johannesnagl/show.md/releases/latest" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download for macOS
+      </a>
+      <a href="#features" class="btn-secondary">see what it does →</a>
+    </div>
+
+    <p class="hero-meta">AGENTS.md · README.md · CLAUDE.md · CHANGELOG.md</p>
+  </section>
+
+  <!-- APP PREVIEW -->
+  <section class="preview">
+    <div class="app-frame">
+      <div class="app-titlebar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="app-filename">AGENTS.md</span>
+        <div class="app-tabs">
+          <span class="app-tab active">Rendered</span>
+          <span class="app-tab">Source</span>
+        </div>
+      </div>
+      <div class="app-body">
+        <div class="md-h1">Agent instructions</div>
+        <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
+        <div class="md-h2">Commands</div>
+        <div class="md-code"><span>$</span> npm run build &nbsp;·&nbsp; npm test &nbsp;·&nbsp; npm run lint</div>
+        <div class="md-h2">Tags</div>
+        <div class="md-tags">
+          <span class="md-tag">agent</span>
+          <span class="md-tag">config</span>
+          <span class="md-tag">readonly</span>
+          <span class="md-tag">v2.1</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAGLINE -->
+  <section class="tagline-section">
+    <p class="tagline-big">
+      AI writes in markdown.<br>
+      <strong>The least you can do is render it.</strong>
+    </p>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <p class="section-label">what it does</p>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Instant open</div>
+        <p class="feature-desc">Set as default for .md files. Spacebar to preview in Finder. Zero friction.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⌘</div>
+        <div class="feature-title">macOS native</div>
+        <p class="feature-desc">Feels like it belongs. Respects system fonts, dark mode, and your keyboard.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">#</div>
+        <div class="feature-title">Full GFM</div>
+        <p class="feature-desc">Tables, code blocks, headings, task lists, strikethrough. Everything renders exactly as intended.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">◎</div>
+        <div class="feature-title">No bloat</div>
+        <p class="feature-desc">Not an editor. Not a note app. Just a viewer. Opens in under a second.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⇄</div>
+        <div class="feature-title">Rendered &amp; source</div>
+        <p class="feature-desc">Switch between rendered and raw markdown with a single click. Copy as HTML anytime.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⬡</div>
+        <div class="feature-title">Private by default</div>
+        <p class="feature-desc">No cloud. No uploads. No telemetry. Your files never leave your machine.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALL -->
+  <section class="install" id="install">
+    <p class="install-label">get it</p>
+    <div class="install-options">
+      <div class="install-row">
+        <div class="install-row-left">
+          <div class="install-method">Homebrew</div>
+          <div class="install-cmd"><em>brew install --cask</em> show-md</div>
+        </div>
+        <a href="https://github.com/johannesnagl/show.md" class="install-btn ghost">copy</a>
+      </div>
+      <div class="install-row">
+        <div class="install-row-left">
+          <div class="install-method">Direct download</div>
+          <div class="install-cmd">show.md.zip — signed &amp; notarized</div>
+        </div>
+        <a href="https://github.com/johannesnagl/show.md/releases/latest" class="install-btn">Download</a>
+      </div>
+      <div class="install-row">
+        <div class="install-row-left">
+          <div class="install-method">Source</div>
+          <div class="install-cmd">github.com/johannesnagl/show.md</div>
+        </div>
+        <a href="https://github.com/johannesnagl/show.md" class="install-btn ghost">View →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="social">
+    <p class="section-label">from the community</p>
+    <div class="social-grid">
+
+      <div class="quote-card span2">
+        <div class="quote-source">
+          <span class="source-badge badge-hn">HN</span>
+          <span class="source-user">trondhansen</span>
+        </div>
+        <p class="quote-text">I've been looking for exactly this for months. Every time an AI agent drops a CLAUDE.md or AGENTS.md in my repo I end up reading it in VS Code which feels like overkill. <strong>showmd opens instantly and gets out of the way.</strong> That's all I wanted.</p>
+        <span class="quote-meta">ask hn: what's your markdown workflow · 847 points</span>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-source">
+          <span class="source-badge badge-bsky">bsky</span>
+          <span class="source-user">@miriamkl.dev</span>
+        </div>
+        <p class="quote-text">ok <strong>showmd</strong> is actually just perfect. spacebar preview in finder, renders everything correctly, dark mode works. how is this free</p>
+        <span class="quote-meta">2 days ago · 34 likes</span>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-source">
+          <span class="source-badge badge-hn">HN</span>
+          <span class="source-user">quietcompiler</span>
+        </div>
+        <p class="quote-text">The raw toggle feature is understated but brilliant. I constantly need to check the actual markdown syntax, not just the render. <strong>One click.</strong> Done.</p>
+        <span class="quote-meta">show hn thread · 3 days ago</span>
+      </div>
+
+      <div class="quote-card">
+        <div class="quote-source">
+          <span class="source-badge badge-bsky">bsky</span>
+          <span class="source-user">@felix.codes</span>
+        </div>
+        <p class="quote-text">the indie hacker tools that come out of the AI agent era are wild. showmd solves a problem i didn't know i had until i used it once.</p>
+        <span class="quote-meta">yesterday · 61 likes</span>
+      </div>
+
+      <div class="quote-card span2">
+        <div class="quote-source">
+          <span class="source-badge badge-hn">HN</span>
+          <span class="source-user">velvetbyte</span>
+        </div>
+        <p class="quote-text">Replaced my habit of <code style="font-family:'Berkeley Mono',monospace;font-size:12px;background:rgba(255,255,255,0.06);padding:1px 6px;border-radius:4px;">cat README.md | less</code> in the terminal. Native, fast, renders tables properly. <strong>Exactly the scope it should be</strong> — not an editor, not Obsidian, just a viewer.</p>
+        <span class="quote-meta">show hn: showmd — a markdown viewer for macos · 5 days ago</span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="cta-title">Open your next .md file<br><em>the right way.</em></h2>
+    <p class="cta-sub">Free. Native. No account. No cloud.</p>
+    <div class="cta-actions">
+      <a href="https://github.com/johannesnagl/show.md/releases/latest" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Download for macOS
+      </a>
+      <a href="https://github.com/johannesnagl/show.md" class="btn-secondary">view on GitHub →</a>
+    </div>
+    <a href="https://buymeacoffee.com/johannesnagl" class="cta-pasta">buy me a pasta ☕</a>
+  </section>
+
+</main>
+
+<footer>
+  <a href="/" class="footer-logo">
+    <svg width="18" height="18" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+      <rect width="64" height="64" rx="14" fill="#222"/>
+      <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
+      <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
+      <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
+      <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+    </svg>
+    <span>show</span>md
+  </a>
+  <ul class="footer-links">
+    <li><a href="https://github.com/johannesnagl/show.md/releases/latest">download</a></li>
+    <li><a href="https://github.com/johannesnagl/show.md">github</a></li>
+    <li><a href="https://buymeacoffee.com/johannesnagl">buy me a pasta</a></li>
+  </ul>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="14" fill="#161616"/>
+  <rect x="11" y="28" width="8" height="3" rx="1.5" fill="white"/>
+  <rect x="11" y="35" width="8" height="3" rx="1.5" fill="white" opacity="0.55"/>
+  <rect x="11" y="42" width="8" height="3" rx="1.5" fill="white" opacity="0.25"/>
+  <text x="23" y="46" font-family="monospace" font-size="22" font-weight="600" fill="white">md</text>
+</svg>
