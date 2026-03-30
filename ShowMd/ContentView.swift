@@ -64,8 +64,17 @@ struct ContentView: View {
         Form {
             Section("Preview") {
                 if extensionEnabled {
-                    Label("Extension active", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                    HStack {
+                        Label("Extension active", systemImage: "checkmark.circle.fill")
+                            .foregroundStyle(.green)
+                        Spacer()
+                        Button("Manage in System Settings") {
+                            if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }
+                        .buttonStyle(.link)
+                    }
                 } else {
                     HStack {
                         Label("Extension not installed", systemImage: "xmark.circle.fill")
