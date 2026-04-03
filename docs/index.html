@@ -256,7 +256,7 @@
   }
 
   .nav-links a {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--muted);
     text-decoration: none;
     transition: color 0.2s;
@@ -322,6 +322,14 @@
     gap: 16px;
     opacity: 0;
     animation: fadeUp 0.7s 0.55s forwards;
+  }
+
+  .hero-hint {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    opacity: 0;
+    animation: fadeUp 0.7s 0.65s forwards;
   }
 
   .btn-primary {
@@ -392,7 +400,6 @@
   }
 
   .preview-btn.active.showmd { background: var(--teal); color: var(--white); }
-  .preview-btn.active.other  { background: #444; color: var(--white); }
   .preview-btn.active.macos  { background: #333; color: var(--muted); }
 
   .preview-scene {
@@ -446,7 +453,7 @@
     padding: 8px 14px;
     display: flex;
     align-items: center;
-    gap: 0;
+    gap: 8px;
     border-bottom: 0.5px solid rgba(255,255,255,0.06);
     position: relative;
     flex-shrink: 0;
@@ -454,13 +461,13 @@
 
   .finder-nav-arrows {
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 18px;
-    font-weight: 300;
+    font-size: 12px;
+    font-weight: 400;
     color: rgba(255,255,255,0.2);
     margin-left: 10px;
     display: flex;
-    gap: 4px;
-    line-height: 1;
+    align-items: center;
+    gap: 6px;
   }
 
   .finder-window-title {
@@ -716,25 +723,7 @@
     border-radius: 4px;
   }
 
-  /* state 2: other apps */
-  .app-body-other {
-    padding: 28px 32px;
-  }
-
-  .md-raw-frontmatter {
-    background: #0F0F0F;
-    border: 0.5px solid rgba(255,255,255,0.07);
-    border-radius: 6px;
-    padding: 14px 16px;
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
-    font-size: 11px;
-    color: #555;
-    line-height: 1.7;
-    margin-bottom: 20px;
-    white-space: pre;
-  }
-
-  /* state 3: macOS default */
+  /* state 2: macOS default */
   .app-body-plain {
     padding: 28px 32px;
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
@@ -755,11 +744,10 @@
   }
 
   .install-label {
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--fg);
     margin-bottom: 32px;
   }
 
@@ -821,6 +809,19 @@
 
   .install-btn.ghost:hover { color: var(--fg); border-color: var(--fg-muted); }
 
+  .install-pasta {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .install-pasta a {
+    color: var(--fg);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .install-pasta a:hover { text-decoration: underline; }
+
   /* TAGLINE SECTION */
   .tagline-section {
     position: relative;
@@ -856,11 +857,10 @@
   }
 
   .section-label {
-    font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: var(--fg);
     margin-bottom: 60px;
     text-align: center;
   }
@@ -899,7 +899,7 @@
   }
 
   .feature-desc {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--muted);
     line-height: 1.6;
   }
@@ -1267,54 +1267,42 @@
     margin-bottom: 10px;
   }
   .problem-card p {
-    font-size: 13px;
+    font-size: 15px;
     color: var(--fg-muted);
     line-height: 1.65;
   }
 
-  /* STEPS SECTION */
-  .steps-section {
-    position: relative;
-    z-index: 1;
-    padding: 80px 40px 100px;
-    max-width: 860px;
-    margin: 0 auto;
-    border-top: 0.5px solid var(--border);
-  }
+  /* STEPS (inside install) */
   .steps-list {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-  .step {
-    display: flex;
-    gap: 32px;
-    align-items: flex-start;
-    padding: 28px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+    padding-bottom: 40px;
     border-bottom: 0.5px solid var(--border);
   }
-  .step:last-child { border-bottom: none; }
+  .step {
+    text-align: center;
+  }
   .step-num {
     font-family: ui-monospace, SFMono-Regular, 'SF Mono', Consolas, monospace;
     font-size: 11px;
-    color: var(--fg-subtle);
+    color: var(--teal);
     letter-spacing: 0.06em;
-    width: 24px;
-    flex-shrink: 0;
-    padding-top: 3px;
+    margin-bottom: 12px;
   }
   .step-body h3 {
-    font-size: 17px;
-    font-weight: 400;
+    font-size: 15px;
+    font-weight: 500;
     color: var(--fg);
     margin-bottom: 6px;
     letter-spacing: -0.01em;
   }
   .step-body p {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--fg-muted);
-    line-height: 1.65;
+    line-height: 1.6;
   }
 
   /* FAQ SECTION */
@@ -1354,7 +1342,7 @@
   }
   .faq-item.open .faq-chevron { transform: rotate(180deg); }
   .faq-answer {
-    font-size: 14px;
+    font-size: 15px;
     color: var(--fg-muted);
     line-height: 1.7;
     max-height: 0;
@@ -1525,11 +1513,10 @@
     footer { padding: 24px 20px; flex-direction: column; gap: 16px; text-align: center; }
     .problem-section { padding: 60px 20px; }
     .problem-grid { grid-template-columns: 1fr; }
-    .steps-section { padding: 60px 20px; }
     .faq-section { padding: 60px 20px; }
     .author-section { padding: 60px 20px; }
     .author-card { flex-direction: column; align-items: flex-start; gap: 16px; padding: 20px; }
-    .step { gap: 20px; }
+    .steps-list { grid-template-columns: 1fr; gap: 16px; }
     .fm-section { padding: 40px 16px; }
     .fm-inner { gap: 32px; }
     .fm-title { font-size: 24px; }
@@ -1558,9 +1545,8 @@
     <li><a href="#features">features</a></li>
     <li><a href="#install">install</a></li>
     <li><a href="#faq">faq</a></li>
-    <li><a href="https://github.com/johannesnagl/show.md" rel="noopener" target="_blank">github</a></li>
   </ul>
-  <a href="https://github.com/johannesnagl/show.md/releases/latest" class="nav-cta" rel="noopener" target="_blank">Download free</a>
+
 </nav>
 </header>
 
@@ -1576,12 +1562,13 @@
     <p class="hero-tagline">The most readable way to preview any .md file on macOS.</p>
 
     <div class="hero-actions">
-      <a href="https://github.com/johannesnagl/show.md/releases/latest" class="btn-primary" rel="noopener" target="_blank">
+      <a href="#install" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Download for macOS
       </a>
       <a href="#features" class="btn-secondary">see what it does →</a>
     </div>
+    <p class="hero-hint">Open source, free</p>
 
   </section>
 
@@ -1589,8 +1576,7 @@
   <section class="preview" aria-label="App preview">
     <div class="preview-switcher">
       <button class="preview-btn active showmd" data-state="0">✨ With Show.md</button>
-      <button class="preview-btn other" data-state="1">😬 With other apps</button>
-      <button class="preview-btn macos" data-state="2">😩 Default macOS</button>
+      <button class="preview-btn macos" data-state="1">😩 Built-in macOS Preview</button>
     </div>
 
     <div class="preview-scene">
@@ -1685,18 +1671,7 @@ before running any automated task.
 $ npm run build · npm test · npm run lint</div>
       </div>
 
-      <!-- State 2: With other apps -->
-      <div class="app-state" id="state-other">
-        <div class="app-body-other">
-          <p class="md-p" style="color:#555;">— title: Agent instructions tags: [agent, config, v2] version: 2.1 —</p>
-          <div class="md-h1">Agent instructions</div>
-          <p class="md-p">This file configures how the AI agent behaves in this repo. Read carefully before running any automated task or deploying to production.</p>
-          <div class="md-h2">Commands</div>
-          <div class="md-code"><span>$</span> npm run build &nbsp;·&nbsp; npm test &nbsp;·&nbsp; npm run lint</div>
-        </div>
-      </div>
-
-      <!-- State 3: Default macOS -->
+      <!-- State 2: Default macOS -->
       <div class="app-state" id="state-macos">
         <div class="app-body-plain">---
 title: Agent instructions
@@ -1731,46 +1706,16 @@ $ npm run build · npm test · npm run lint</div>
         <p>Press Space on a .md file and macOS dumps the raw source — hashes, asterisks, dashes and all. Unreadable.</p>
       </article>
       <article class="problem-card reveal" role="listitem">
-        <h3>VS Code is overkill</h3>
-        <p>Opening a full editor just to read a README or AGENTS.md takes seconds and shifts your focus entirely.</p>
+        <h3>AI files are a mess to read</h3>
+        <p>AGENTS.md, CLAUDE.md, .cursorrules — full of XML tags, alerts, and structured prompts. Every viewer renders them as garbled angle brackets.</p>
       </article>
       <article class="problem-card reveal" role="listitem">
-        <h3>Frontmatter is ignored everywhere</h3>
-        <p>Every other viewer dumps the <code style="font-family:ui-monospace,monospace;font-size:11px;background:var(--grid-line);padding:1px 5px;border-radius:3px">---</code> block as noise at the top. No app parses it.</p>
+        <h3>Diagrams and math render as code</h3>
+        <p>Mermaid flowcharts and LaTeX equations are just raw text in every other previewer. You have to open a browser to see what they actually look like.</p>
       </article>
     </div>
   </section>
 
-  <!-- STEPS -->
-  <section class="steps-section" aria-labelledby="steps-heading">
-    <div class="section-title-block reveal">
-      <h2 id="steps-heading">Three steps, then forget about it <a href="#steps-heading" class="heading-anchor" aria-label="Link to this section">#</a></h2>
-      <div class="section-rule"></div>
-    </div>
-    <ol class="steps-list reveal">
-      <li class="step">
-        <div class="step-num" aria-hidden="true">01</div>
-        <div class="step-body">
-          <h3>Download &amp; open show.md</h3>
-          <p>The Quick Look extension registers automatically. No configuration, no Terminal commands.</p>
-        </div>
-      </li>
-      <li class="step">
-        <div class="step-num" aria-hidden="true">02</div>
-        <div class="step-body">
-          <h3>Enable in System Settings</h3>
-          <p>System Settings → Privacy &amp; Security → Extensions → Quick Look. One toggle.</p>
-        </div>
-      </li>
-      <li class="step">
-        <div class="step-num" aria-hidden="true">03</div>
-        <div class="step-body">
-          <h3>Spacebar any .md file in Finder</h3>
-          <p>Rendered markdown, frontmatter table, source toggle. That's it.</p>
-        </div>
-      </li>
-    </ol>
-  </section>
 
   <!-- TAGLINE -->
   <section class="tagline-section" aria-label="Tagline">
@@ -1780,28 +1725,30 @@ $ npm run build · npm test · npm run lint</div>
     </p>
   </section>
 
-  <!-- FRONTMATTER SPOTLIGHT -->
+  <!-- SPOTLIGHT: UNIQUE FEATURES -->
   <section class="fm-section" aria-labelledby="fm-heading">
     <div class="fm-inner">
       <div class="fm-text">
         <p class="fm-eyebrow">unique to show.md</p>
-        <h2 class="fm-title" id="fm-heading">YAML frontmatter,<br><em>finally rendered.</em></h2>
-        <p class="fm-desc">Most markdown viewers ignore the <code>---</code> block at the top of your files. show.md parses it and surfaces it as a collapsible metadata table — collapsed by default so it never gets in the way, always one click away when you need it.</p>
-        <p class="fm-desc">Works with plain values, quoted strings, arrays, and multi-line folded blocks. Everything authors actually write.</p>
+        <h2 class="fm-title" id="fm-heading">Built for how<br><em>markdown is actually used today.</em></h2>
+        <p class="fm-desc">YAML frontmatter parsed into a collapsible metadata table — collapsed by default, one click to expand. No other viewer does this.</p>
+        <p class="fm-desc">Agentic AI XML tags — <code>&lt;example&gt;</code>, <code>&lt;instructions&gt;</code>, <code>&lt;thinking&gt;</code>, and 17 more — rendered as labeled, bordered blocks instead of raw angle brackets.</p>
       </div>
       <div class="fm-visual">
         <div class="fm-before">
           <div class="fm-visual-label">raw file</div>
           <pre class="fm-code"><span class="fm-delim">---</span>
 <span class="fm-key">title</span>: Agent instructions
-<span class="fm-key">description</span>: &gt;
-  Configures how the AI agent
-  behaves in this repository.
 <span class="fm-key">tags</span>: [agent, config, v2]
 <span class="fm-delim">---</span>
 
-<span class="fm-body"># Agent instructions
-...</span></pre>
+<span class="fm-body">&lt;instructions&gt;
+  Follow these rules carefully.
+&lt;/instructions&gt;
+
+&lt;example&gt;
+  Run: npm test
+&lt;/example&gt;</span></pre>
         </div>
         <div class="fm-arrow">→</div>
         <div class="fm-after">
@@ -1810,17 +1757,22 @@ $ npm run build · npm test · npm run lint</div>
             <div class="fm-details">
               <div class="fm-summary">
                 <span class="fm-triangle">▶</span>
-                <span class="fm-summary-text">METADATA (3) — YAML FRONTMATTER</span>
+                <span class="fm-summary-text">METADATA (2) — YAML FRONTMATTER</span>
               </div>
               <table class="fm-table">
                 <tr><th>title</th><td>Agent instructions</td></tr>
-                <tr><th>description</th><td>Configures how the AI agent behaves in this repository.</td></tr>
                 <tr><th>tags</th><td>agent, config, v2</td></tr>
               </table>
             </div>
             <div class="fm-rendered-body">
-              <div class="fm-rendered-h1"># Agent instructions</div>
-              <div class="fm-rendered-dots">···</div>
+              <div class="fm-xml-tag" style="border-left: 3px solid rgba(59,130,246,0.5); background: rgba(59,130,246,0.05); padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+                <div style="font-size: 9px; color: rgba(255,255,255,0.35); margin-bottom: 4px;">&lt;instructions&gt;</div>
+                <div style="font-size: 11px; color: var(--fg-muted);">Follow these rules carefully.</div>
+              </div>
+              <div class="fm-xml-tag" style="border-left: 3px solid rgba(34,197,94,0.5); background: rgba(34,197,94,0.05); padding: 8px 12px; border-radius: 4px;">
+                <div style="font-size: 9px; color: rgba(255,255,255,0.35); margin-bottom: 4px;">&lt;example&gt;</div>
+                <div style="font-size: 11px; color: var(--fg-muted);">Run: npm test</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1830,7 +1782,7 @@ $ npm run build · npm test · npm run lint</div>
 
   <!-- FEATURES -->
   <section class="features" id="features" aria-labelledby="features-heading">
-    <h2 class="section-label" id="features-heading">what it does</h2>
+    <h2 class="section-label" id="features-heading">what it does <a href="#features" class="heading-anchor" aria-label="Link to this section">#</a></h2>
     <div class="features-grid">
       <div class="feature">
         <div class="feature-icon">⚡</div>
@@ -1888,14 +1840,9 @@ $ npm run build · npm test · npm run lint</div>
         <p class="feature-desc">.md, .markdown, .mdx, .mdc, .rmd, .qmd, .mdown, .mkd, .mkdn — every markdown extension, one previewer.</p>
       </div>
       <div class="feature">
-        <div class="feature-icon">😄</div>
-        <h3 class="feature-title">Emoji shortcodes</h3>
-        <p class="feature-desc">Type <code style="font-family:ui-monospace,monospace;font-size:11px;background:var(--grid-line);padding:1px 5px;border-radius:3px">:rocket:</code> and see it rendered as an emoji. 200+ shortcodes supported.</p>
-      </div>
-      <div class="feature">
         <div class="feature-icon">*</div>
-        <h3 class="feature-title">Footnotes &amp; more</h3>
-        <p class="feature-desc">Footnotes, ==highlight==, ^super^script, ~sub~script, smart quotes, and autolinked URLs — all built in.</p>
+        <h3 class="feature-title">Emoji, footnotes &amp; more</h3>
+        <p class="feature-desc">Emoji shortcodes, footnotes, ==highlight==, ^super^script, ~sub~script, smart quotes, and autolinked URLs — all built in.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">🖼</div>
@@ -1917,7 +1864,30 @@ $ npm run build · npm test · npm run lint</div>
 
   <!-- INSTALL -->
   <section class="install" id="install" aria-labelledby="install-heading">
-    <h2 class="install-label" id="install-heading">get it</h2>
+    <h2 class="install-label" id="install-heading">get it <a href="#install" class="heading-anchor" aria-label="Link to this section">#</a></h2>
+    <ol class="steps-list">
+      <li class="step">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <h3>Download &amp; open</h3>
+          <p>The extension registers automatically. No config needed.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <h3>Enable in System Settings</h3>
+          <p>Privacy &amp; Security → Extensions → Quick Look. One toggle.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <h3>Press Space in Finder</h3>
+          <p>Rendered markdown, frontmatter, source toggle. Done.</p>
+        </div>
+      </li>
+    </ol>
     <div class="install-options">
       <div class="install-row">
         <div class="install-row-left">
@@ -1931,7 +1901,7 @@ $ npm run build · npm test · npm run lint</div>
           <div class="install-method">Direct download</div>
           <div class="install-cmd">show.md.zip — signed &amp; notarized</div>
         </div>
-        <a href="https://github.com/johannesnagl/show.md/releases/latest" class="install-btn" rel="noopener" target="_blank">Download</a>
+        <a href="https://github.com/johannesnagl/show.md/releases/latest" class="install-btn" rel="noopener" target="_blank">Download v1.0.0</a>
       </div>
       <div class="install-row">
         <div class="install-row-left">
@@ -1941,6 +1911,7 @@ $ npm run build · npm test · npm run lint</div>
         <a href="https://github.com/johannesnagl/show.md" class="install-btn ghost" rel="noopener" target="_blank">View →</a>
       </div>
     </div>
+    <p class="install-pasta">Do you like it? <a href="https://paypal.me/jollife" rel="noopener" target="_blank">Buy me a pasta 🍝</a></p>
   </section>
 
   <!-- FAQ -->
@@ -1993,10 +1964,10 @@ $ npm run build · npm test · npm run lint</div>
   <section class="author-section" id="author" aria-labelledby="author-heading">
     <p class="author-eyebrow reveal" id="author-heading">made in vienna, europe</p>
     <div class="author-card reveal">
-      <img src="/author.jpg" alt="Johannes Nagl" class="author-photo" width="72" height="72" loading="lazy">
+      <img src="./author.jpg" alt="Johannes Nagl" class="author-photo" width="72" height="72" loading="lazy">
       <div class="author-info">
         <div class="author-name">Johannes Nagl</div>
-        <p class="author-role">Concept, growth, and everything except coding — coded with <strong>Claude</strong></p>
+        <p class="author-role">Concept, growth, and everything except coding — coded with <strong>Claude</strong>. First version brainstormed &amp; iterated with <a href="https://www.linkedin.com/in/moritz-kobrna-a13943218/" rel="noopener" target="_blank">Moritz Kobrna</a></p>
         <div class="author-links">
           <a href="https://www.linkedin.com/in/johannesnagl/" class="author-link" rel="noopener" target="_blank">LinkedIn</a>
           <a href="https://github.com/johannesnagl" class="author-link" rel="noopener" target="_blank">GitHub</a>
@@ -2009,9 +1980,8 @@ $ npm run build · npm test · npm run lint</div>
   <!-- CTA -->
   <section class="cta-section">
     <h2 class="cta-title">Open your next .md file<br><em>the right way.</em></h2>
-    <p class="cta-sub">Free. Native. No account. No cloud.</p>
     <div class="cta-actions">
-      <a href="https://github.com/johannesnagl/show.md/releases/latest" class="btn-primary" rel="noopener" target="_blank">
+      <a href="#install" class="btn-primary">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Download for macOS
       </a>
@@ -2039,7 +2009,6 @@ $ npm run build · npm test · npm run lint</div>
     <li><a href="https://github.com/johannesnagl/show.md/releases/latest" rel="noopener" target="_blank">download</a></li>
     <li><a href="https://github.com/johannesnagl/show.md" rel="noopener" target="_blank">github</a></li>
     <li><a href="https://www.linkedin.com/in/johannesnagl/" rel="noopener" target="_blank">linkedin</a></li>
-    <li><a href="https://buymeacoffee.com/johannesnagl" rel="noopener" target="_blank">buy me a pasta</a></li>
   </ul>
 </footer>
 
@@ -2101,9 +2070,9 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 
 // Preview state switcher with auto-cycle (pauses on manual interaction)
 (function() {
-  const stateIds = ['state-showmd', 'state-other', 'state-macos'];
+  const stateIds = ['state-showmd', 'state-macos'];
   const btns = document.querySelectorAll('.preview-btn');
-  const btnClasses = ['showmd', 'other', 'macos'];
+  const btnClasses = ['showmd', 'macos'];
   let current = 0;
   let timer;
 
@@ -2117,7 +2086,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
 
   function startCycle() {
     clearInterval(timer);
-    timer = setInterval(() => showState((current + 1) % 3), 3500);
+    timer = setInterval(() => showState((current + 1) % 2), 3500);
   }
 
   btns.forEach(function(btn, i) {
@@ -2132,7 +2101,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
   // Stop auto-cycle after one full rotation (WCAG 2.2.2) or if user prefers reduced motion
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     startCycle();
-    setTimeout(function() { clearInterval(timer); }, 3500 * 3);
+    setTimeout(function() { clearInterval(timer); }, 3500 * 2);
   }
 
   // Rendered / Source tab toggle
