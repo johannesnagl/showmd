@@ -103,6 +103,15 @@ import Testing
         #expect(result == input)
     }
 
+    @Test func autolinkDoesNotDoubleEscapeAmpersand() {
+        // URLs in text segments are already HTML-escaped by the visitor
+        let input = "<p>Visit https://example.com?a=1&amp;b=2 today</p>"
+        let result = HTMLPostProcessor.convertAutolinks(input)
+        // Should NOT produce &amp;amp;
+        #expect(!result.contains("&amp;amp;"))
+        #expect(result.contains("href=\"https://example.com?a=1&amp;b=2\""))
+    }
+
     // MARK: - Smart quotes
 
     @Test func smartDoubleQuotes() {
@@ -171,6 +180,14 @@ import Testing
         // Raw HTML tags must be escaped — no executable tags in output
         #expect(!html.contains("<script>"))
         #expect(!html.contains("<img"))
+    }
+
+    @Test func frontmatterXSSEscapesSingleQuotes() {
+        let html = HTMLTemplate.frontmatterHTML([
+            (key: "test", value: "it's a 'trap'")
+        ])
+        #expect(html.contains("&#39;"))
+        #expect(!html.contains("'trap'"))
     }
 
     // MARK: - Full pipeline

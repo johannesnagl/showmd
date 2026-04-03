@@ -151,7 +151,8 @@ enum HTMLPostProcessor {
         let matches = autolinkPattern.matches(in: text, range: range).reversed()
         for match in matches {
             guard let urlRange = Range(match.range(at: 1), in: text) else { continue }
-            let url = HTMLEscape.escape(String(text[urlRange]))
+            // Text segments are already HTML-escaped by the visitor, so don't re-escape
+            let url = String(text[urlRange])
             result.replaceCharacters(in: match.range, with: "<a href=\"\(url)\">\(url)</a>")
         }
         return result as String

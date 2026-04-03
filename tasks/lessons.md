@@ -127,11 +127,33 @@ To support non-standard markdown extensions (`.mdx`, `.mdc`, `.rmd`, `.qmd`, `.m
 
 ## Rich Feature Rendering (Syntax Highlighting, KaTeX, Mermaid)
 
-- CDN scripts load fine in WKWebView because the extension has `com.apple.security.network.client` entitlement — no need to bundle ~1MB of JS libraries.
-- CDN URLs used: highlight.js 11.9.0 (github/github-dark themes), KaTeX 0.16.9, Mermaid 10.
+- All JS/CSS dependencies are bundled locally in the Swift package `Resources/` directory and loaded via `Bundle.module` → `ResourceLoader`. No CDN, no network — fully offline rendering.
+- Resources: highlight.min.js, github.min.css, github-dark.min.css, katex.min.js, katex.min.css (with base64-encoded WOFF2 fonts), auto-render.min.js, mermaid.min.js.
 - Mermaid blocks require special handling in `HTMLVisitor`: detect `language == "mermaid"` and emit `<pre class="mermaid">` instead of `<pre><code class="language-mermaid">`.
 - Syntax highlighting is restricted to code blocks with an explicit language class (`pre code[class*="language-"]`) to avoid highlighting plain code blocks.
 - KaTeX auto-render uses `$...$` (inline) and `$$...$$` (block) delimiters, with `ignoredTags` to avoid rendering inside `<pre>`, `<code>`, etc.
+
+---
+
+## Security — XSS Prevention
+
+**CRITICAL: Every piece of user-supplied content that ends up in HTML output MUST be escaped.** This is non-negotiable. XSS in a Quick Look extension means any `.md` file on the filesystem can execute arbitrary JavaScript in the WKWebView.
+
+### Mandatory rules
+
+1. **Always use `HTMLEscape.escape()` on any string interpolated into HTML** — text content, attributes, URLs, code block content, language attributes, everything.
+2. **Never trust raw HTML from markdown files.** Use `sanitizeHTML()` to strip `<script>`, `<iframe>`, event handlers (`on*=`), and `javascript:` URLs. Only safe structural tags pass through.
+3. **Never interpolate unescaped values into JavaScript strings** — e.g. `evaluateJavaScript("document.className = '\(value)'")`. Escape or use a fixed enum.
+4. **HTMLEscape must cover all 5 chars:** `&`, `<`, `>`, `"`, `'` (single quotes matter for attributes and JS strings).
+5. **Every new rendering path needs an XSS test** — if you add a new code block language, a new post-processor, or a new template interpolation, write a test that tries to inject `<script>alert(1)</script>` and verifies it's escaped or stripped.
+
+### Past incidents
+
+- Math code blocks (`\`\`\`math`) passed `codeBlock.code` raw into HTML — a crafted `.md` file could inject `<script>` tags.
+- Raw HTML passthrough (`visitHTMLBlock`/`visitInlineHTML`) echoed untrusted HTML verbatim — any `<script>` in a `.md` file executed.
+- Code block language attribute was interpolated unescaped into `class="language-..."` — allowed attribute injection.
+- `HTMLEscape` was missing single-quote escaping — left single-quoted HTML/JS contexts vulnerable.
+- Autolinks double-escaped already-escaped URLs producing `&amp;amp;` — text segments from the visitor are already escaped.
 
 ---
 
@@ -144,7 +166,8 @@ To support non-standard markdown extensions (`.mdx`, `.mdc`, `.rmd`, `.qmd`, `.m
 When adding a feature, always add tests for:
 1. The **happy path** — basic functionality works
 2. **Edge cases** — empty input, special characters, HTML escaping
-3. **Negative cases** — e.g. source-only template should NOT include rich feature scripts
+3. **XSS vectors** — try injecting `<script>`, event handlers, and `javascript:` URLs through every input path
+4. **Negative cases** — e.g. source-only template should NOT include rich feature scripts
 
 ### Current test suites (51 tests total)
 

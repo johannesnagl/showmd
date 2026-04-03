@@ -12,13 +12,17 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     private var fileDirectoryURL: URL?
     private var currentTab: Settings.Tab = Settings.defaultTab
 
+    private var lastTheme: Settings.Theme = Settings.theme
+    private var lastFontSize: Settings.FontSize = Settings.fontSize
+    private var lastMermaid: Bool = Settings.mermaidEnabled
+
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(settingsChanged),
             name: UserDefaults.didChangeNotification,
-            object: nil
+            object: Settings.userDefaults
         )
     }
 
@@ -28,6 +32,14 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
     @objc private func settingsChanged() {
         guard !markdownSource.isEmpty else { return }
+        // Only re-render when relevant settings actually changed
+        let newTheme = Settings.theme
+        let newFontSize = Settings.fontSize
+        let newMermaid = Settings.mermaidEnabled
+        guard newTheme != lastTheme || newFontSize != lastFontSize || newMermaid != lastMermaid else { return }
+        lastTheme = newTheme
+        lastFontSize = newFontSize
+        lastMermaid = newMermaid
         loadCombined()
     }
 
@@ -72,12 +84,13 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     }
 
     func preparePreviewOfFile(at url: URL, completionHandler handler: @escaping (Error?) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             let accessing = url.startAccessingSecurityScopedResource()
             defer { if accessing { url.stopAccessingSecurityScopedResource() } }
             do {
                 let source = try String(contentsOf: url, encoding: .utf8)
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { handler(nil); return }
                     self.currentTab = Settings.defaultTab
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
                     self.copyButton?.isHidden = self.currentTab != .rendered

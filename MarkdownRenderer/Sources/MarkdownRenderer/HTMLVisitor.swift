@@ -1,9 +1,104 @@
+import Foundation
 import Markdown
 
 struct HTMLVisitor: MarkupVisitor {
     typealias Result = String
 
     private var inTableHead = false
+
+    // Tags allowed through raw HTML passthrough (safe subset)
+    private static let allowedTags: Set<String> = [
+        "br", "hr", "b", "i", "u", "em", "strong", "del", "s", "ins", "mark",
+        "sub", "sup", "small", "big", "abbr", "cite", "q", "dfn", "var", "kbd",
+        "samp", "code", "pre", "blockquote", "p", "div", "span", "section",
+        "article", "header", "footer", "nav", "aside", "main", "figure",
+        "figcaption", "details", "summary", "dl", "dt", "dd", "ul", "ol", "li",
+        "table", "thead", "tbody", "tfoot", "tr", "th", "td", "caption",
+        "h1", "h2", "h3", "h4", "h5", "h6", "a", "img", "picture", "source",
+        "video", "audio", "ruby", "rt", "rp", "wbr", "time", "data",
+        "colgroup", "col",
+    ]
+
+    // Attributes that can execute code
+    private static let dangerousAttrPattern = try! NSRegularExpression(
+        pattern: "\\s+on\\w+\\s*=",
+        options: .caseInsensitive
+    )
+
+    /// Sanitize raw HTML: strip dangerous tags and event-handler attributes.
+    private func sanitizeHTML(_ raw: String) -> String {
+        var result = raw
+
+        // Strip dangerous tags with content (block-level sanitization)
+        let stripPairPatterns = [
+            "<script[^>]*>[\\s\\S]*?</script>",
+            "<style[^>]*>[\\s\\S]*?</style>",
+            "<iframe[^>]*>[\\s\\S]*?</iframe>",
+            "<object[^>]*>[\\s\\S]*?</object>",
+            "<form[^>]*>[\\s\\S]*?</form>",
+            "<textarea[^>]*>[\\s\\S]*?</textarea>",
+            "<select[^>]*>[\\s\\S]*?</select>",
+            "<button[^>]*>[\\s\\S]*?</button>",
+        ]
+        for pattern in stripPairPatterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                result = regex.stringByReplacingMatches(
+                    in: result,
+                    range: NSRange(result.startIndex..., in: result),
+                    withTemplate: ""
+                )
+            }
+        }
+
+        // Also strip individual opening/closing dangerous tags (handles inline HTML
+        // where parser delivers tags separately, e.g. <script> and </script> as two nodes)
+        let stripTagPatterns = [
+            "</?script[^>]*>",
+            "</?style[^>]*>",
+            "</?iframe[^>]*>",
+            "<iframe[^>]*/>",
+            "</?object[^>]*>",
+            "<embed[^>]*>",
+            "</?form[^>]*>",
+            "<input[^>]*>",
+            "</?textarea[^>]*>",
+            "</?select[^>]*>",
+            "</?button[^>]*>",
+        ]
+        for pattern in stripTagPatterns {
+            if let regex = try? NSRegularExpression(pattern: pattern, options: .caseInsensitive) {
+                result = regex.stringByReplacingMatches(
+                    in: result,
+                    range: NSRange(result.startIndex..., in: result),
+                    withTemplate: ""
+                )
+            }
+        }
+
+        // Strip event-handler attributes (on*=) from remaining tags
+        let tagRegex = try! NSRegularExpression(pattern: "<([a-zA-Z][a-zA-Z0-9]*)([^>]*)>", options: [])
+        let mutableResult = NSMutableString(string: result)
+        let tagMatches = tagRegex.matches(in: result, range: NSRange(result.startIndex..., in: result)).reversed()
+        for match in tagMatches {
+            guard let attrsRange = Range(match.range(at: 2), in: result) else { continue }
+            let attrs = String(result[attrsRange])
+            let range = NSRange(attrs.startIndex..., in: attrs)
+            if Self.dangerousAttrPattern.firstMatch(in: attrs, range: range) != nil {
+                // Strip all on* attributes
+                let cleanAttrs = Self.dangerousAttrPattern.stringByReplacingMatches(
+                    in: attrs, range: range, withTemplate: " data-removed="
+                )
+                mutableResult.replaceCharacters(in: match.range(at: 2), with: cleanAttrs)
+            }
+        }
+
+        // Also strip javascript: URLs
+        return (mutableResult as String).replacingOccurrences(
+            of: "javascript:",
+            with: "removed:",
+            options: .caseInsensitive
+        )
+    }
 
     mutating func defaultVisit(_ markup: Markup) -> String {
         markup.children.map { visit($0) }.joined()
@@ -69,9 +164,9 @@ struct HTMLVisitor: MarkupVisitor {
             return "<pre class=\"mermaid\">\(escape(codeBlock.code))</pre>\n"
         }
         if codeBlock.language == "math" {
-            return "<div class=\"katex-display\">$$\(codeBlock.code)$$</div>\n"
+            return "<div class=\"katex-display\">$$\(escape(codeBlock.code))$$</div>\n"
         }
-        let lang = codeBlock.language.map { " class=\"language-\($0)\"" } ?? ""
+        let lang = codeBlock.language.map { " class=\"language-\(escape($0))\"" } ?? ""
         return "<pre><code\(lang)>\(escape(codeBlock.code))</code></pre>\n"
     }
 
@@ -79,8 +174,8 @@ struct HTMLVisitor: MarkupVisitor {
         "<hr>\n"
     }
 
-    mutating func visitHTMLBlock(_ html: HTMLBlock) -> String { html.rawHTML }
-    mutating func visitInlineHTML(_ html: InlineHTML) -> String { html.rawHTML }
+    mutating func visitHTMLBlock(_ html: HTMLBlock) -> String { sanitizeHTML(html.rawHTML) }
+    mutating func visitInlineHTML(_ html: InlineHTML) -> String { sanitizeHTML(html.rawHTML) }
 
     // MARK: - Lists
 

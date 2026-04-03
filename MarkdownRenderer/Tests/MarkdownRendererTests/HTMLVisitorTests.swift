@@ -151,4 +151,61 @@ import Markdown
         #expect(html.contains("<input type=\"checkbox\" disabled checked>"))
         #expect(html.contains("done"))
     }
+
+    // MARK: - XSS prevention
+
+    @Test func mathCodeBlockEscapesXSS() {
+        let html = render("```math\n$$</div><script>alert(1)</script><div>$$\n```")
+        #expect(!html.contains("<script>"))
+        #expect(html.contains("&lt;script&gt;"))
+    }
+
+    @Test func languageAttributeEscapesXSS() {
+        let html = render("```\"><script>alert(1)</script>\ncode\n```")
+        #expect(!html.contains("<script>alert"))
+    }
+
+    @Test func rawHTMLBlockStripsScript() {
+        let html = render("<script>alert('xss')</script>")
+        #expect(!html.contains("<script>"))
+    }
+
+    @Test func rawHTMLBlockStripsIframe() {
+        let html = render("<iframe src=\"https://evil.com\"></iframe>")
+        #expect(!html.contains("<iframe"))
+    }
+
+    @Test func rawHTMLBlockStripsEventHandlers() {
+        let html = render("<div onclick=\"alert(1)\">click me</div>")
+        #expect(!html.contains("onclick"))
+    }
+
+    @Test func rawHTMLBlockStripsJavascriptURL() {
+        let html = render("<a href=\"javascript:alert(1)\">link</a>")
+        #expect(!html.contains("javascript:"))
+    }
+
+    @Test func rawHTMLAllowsSafeTags() {
+        let html = render("<div class=\"note\"><strong>Important</strong></div>")
+        #expect(html.contains("<div"))
+        #expect(html.contains("<strong>"))
+    }
+
+    @Test func inlineHTMLStripsScript() {
+        let html = render("text <script>alert(1)</script> more")
+        #expect(!html.contains("<script>"))
+        #expect(html.contains("text"))
+    }
+
+    @Test func linkHrefEscapesQuotes() {
+        let html = render("[click](https://example.com/\"onmouseover=alert(1))")
+        #expect(!html.contains("\"onmouseover"))
+        #expect(html.contains("&quot;"))
+    }
+
+    @Test func imageAltEscapesHTML() {
+        let html = render("![<script>](image.png)")
+        #expect(!html.contains("<script>"))
+        #expect(html.contains("&lt;script&gt;"))
+    }
 }
