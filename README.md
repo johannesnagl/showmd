@@ -34,6 +34,8 @@ Then open **show.md** once, go to **System Settings → Privacy & Security → E
 - **Mermaid diagrams** — optional, toggle in settings
 - **YAML frontmatter** — parsed and rendered as a collapsible metadata table
 - **Emoji shortcodes** — `:rocket:` → 🚀
+- **GitHub-style alerts** — `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`
+- **Agentic AI XML tags** — `<example>`, `<instructions>`, `<thinking>`, `<context>`, and more rendered as labeled blocks
 - **Footnotes, highlight, superscript, subscript, smart quotes**
 - **Rendered / Source toggle** — switch between rendered HTML and raw Markdown
 - **Copy as HTML** — one click to copy the rendered output

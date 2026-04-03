@@ -20,7 +20,7 @@ Then enable in System Settings → Privacy & Security → Extensions → Quick L
 - Mermaid diagrams (optional, toggle in settings)
 - YAML frontmatter parsed as a collapsible metadata table
 - GitHub-style alerts: NOTE, TIP, IMPORTANT, WARNING, CAUTION
-- Agentic AI XML tag styling for prompt engineering files
+- Agentic AI XML tag styling for prompt engineering files: example, instructions, thinking, reflection, planning, context, important, rule, system-prompt, user-prompt, assistant-response, tool-use, tool-result, constraints, guidelines, persona, task, step, output-format, example-agent — rendered as labeled bordered blocks
 - Emoji shortcodes: :rocket: becomes a rocket emoji
 - Footnotes, highlight (==text==), superscript (x^2^), subscript (H~2~O), smart quotes
 - Rendered / Source toggle to switch between HTML and raw Markdown
