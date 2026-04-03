@@ -16,6 +16,9 @@ let package = Package(
             name: "MarkdownRenderer",
             dependencies: [
                 .product(name: "Markdown", package: "swift-markdown"),
+            ],
+            resources: [
+                .copy("Resources"),
             ]
         ),
         .testTarget(

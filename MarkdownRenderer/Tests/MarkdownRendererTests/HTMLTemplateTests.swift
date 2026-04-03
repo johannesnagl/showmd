@@ -35,23 +35,28 @@ import Testing
 
     // MARK: - Rich features
 
-    @Test func wrapIncludesHighlightJS() {
+    @Test func wrapIncludesInlinedHighlightJS() {
         let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
-        #expect(html.contains("highlight.min.js"))
-        #expect(html.contains("github.min.css"))
-        #expect(html.contains("github-dark.min.css"))
+        #expect(html.contains("hljs.highlightElement"))
+        #expect(html.contains("prefers-color-scheme: light"))
+        #expect(html.contains("prefers-color-scheme: dark"))
     }
 
-    @Test func wrapIncludesKaTeX() {
+    @Test func wrapIncludesInlinedKaTeX() {
         let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
-        #expect(html.contains("katex.min.js"))
-        #expect(html.contains("auto-render.min.js"))
-        #expect(html.contains("katex.min.css"))
+        #expect(html.contains("renderMathInElement"))
+        #expect(html.contains(".katex"))
     }
 
-    @Test func wrapIncludesMermaid() {
+    @Test func wrapIncludesInlinedMermaid() {
         let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
-        #expect(html.contains("mermaid.min.js"))
+        #expect(html.contains("mermaid.initialize"))
+    }
+
+    @Test func wrapHasNoCDNReferences() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
+        #expect(!html.contains("cdnjs.cloudflare.com"))
+        #expect(!html.contains("cdn.jsdelivr.net"))
     }
 
     @Test func wrapCombinedIncludesRichFeatures() {
@@ -62,16 +67,16 @@ import Testing
             fontSize: .medium,
             defaultTab: .rendered
         )
-        #expect(html.contains("highlight.min.js"))
-        #expect(html.contains("katex.min.js"))
-        #expect(html.contains("mermaid.min.js"))
+        #expect(html.contains("hljs.highlightElement"))
+        #expect(html.contains("renderMathInElement"))
+        #expect(html.contains("mermaid.initialize"))
     }
 
     @Test func wrapSourceDoesNotIncludeRichFeatures() {
         let html = HTMLTemplate.wrapSource(body: "<pre><code>hi</code></pre>", fontSize: .medium)
-        #expect(!html.contains("highlight.min.js"))
-        #expect(!html.contains("katex.min.js"))
-        #expect(!html.contains("mermaid.min.js"))
+        #expect(!html.contains("hljs"))
+        #expect(!html.contains("katex"))
+        #expect(!html.contains("mermaid"))
     }
 
     // MARK: - Combined template

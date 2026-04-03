@@ -84,10 +84,11 @@ public enum HTMLTemplate {
 
     // MARK: - Rich features (syntax highlighting, math, diagrams)
 
-    private static let richFeatureHead = """
+    private static var richFeatureHead: String {
+        """
         <!-- Syntax Highlighting -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" media="(prefers-color-scheme: light)">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" media="(prefers-color-scheme: dark)">
+        <style media="(prefers-color-scheme: light)">\(ResourceLoader.highlightLightCSS)</style>
+        <style media="(prefers-color-scheme: dark)">\(ResourceLoader.highlightDarkCSS)</style>
         <style>
           [data-theme="light"] .hljs { background: var(--code-bg); }
           [data-theme="dark"] .hljs { background: var(--code-bg); }
@@ -96,14 +97,16 @@ public enum HTMLTemplate {
           .katex-display { margin: 16px 0; overflow-x: auto; }
         </style>
         <!-- KaTeX -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+        <style>\(ResourceLoader.katexCSS)</style>
         """
+    }
 
-    private static let richFeatureScripts = """
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    private static var richFeatureScripts: String {
+        """
+        <script>\(ResourceLoader.highlightJS)</script>
+        <script>\(ResourceLoader.katexJS)</script>
+        <script>\(ResourceLoader.autoRenderJS)</script>
+        <script>\(ResourceLoader.mermaidJS)</script>
         <script>
         document.addEventListener('DOMContentLoaded', function() {
           // Syntax highlighting — only code blocks with a specified language
@@ -130,6 +133,7 @@ public enum HTMLTemplate {
         });
         </script>
         """
+    }
 
     private static let css = """
         :root {
