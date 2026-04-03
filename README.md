@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/icon.svg" width="128" height="128" alt="show.md icon">
+  <img src="docs/icon.svg" width="128" height="128" alt="showmd icon">
 </p>
 
-<h1 align="center">show.md</h1>
+<h1 align="center">showmd</h1>
 
 <p align="center">
   <strong>The most readable way to preview any <code>.md</code> file on macOS.</strong><br>
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://show.md">Website</a> &middot;
+  <a href="https://mojo.tech/showmd">Website</a> &middot;
   <a href="#install">Install</a> &middot;
   <a href="#features">Features</a> &middot;
   <a href="#build-from-source">Build from Source</a>
@@ -24,7 +24,7 @@
 brew install --cask show-md
 ```
 
-Then open **show.md** once, go to **System Settings → Privacy & Security → Extensions → Quick Look**, and enable it. After that, pressing <kbd>Space</kbd> on any Markdown file in Finder will use show.md automatically.
+Then open **showmd** once, go to **System Settings → Privacy & Security → Extensions → Quick Look**, and enable it. After that, pressing <kbd>Space</kbd> on any Markdown file in Finder will use showmd automatically.
 
 ## Features
 
@@ -101,7 +101,7 @@ show.md/
 │   │       ├── Settings.swift          # UserDefaults via App Groups
 │   │       └── Resources/             # highlight.js, KaTeX, Mermaid (offline)
 │   └── Tests/
-├── docs/                    # Marketing website (show.md)
+├── docs/                    # Marketing website (showmd)
 └── project.yml              # XcodeGen project definition
 ```
 
@@ -122,6 +122,6 @@ MIT
 
 ## Author
 
-**Johannes Nagl** — [show.md](https://show.md)
+**Johannes Nagl** — [showmd](https://mojo.tech/showmd)
 
 Concept, growth, and everything except coding — coded with **Claude**.

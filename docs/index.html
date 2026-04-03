@@ -3,35 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>show.md — The most readable way to preview any .md file on macOS</title>
-<meta name="description" content="show.md is a free, native macOS Quick Look extension that renders Markdown beautifully. YAML frontmatter as a collapsible table, rendered and source toggle, dark mode. No account, no cloud.">
+<title>showmd — The most readable way to preview any .md file on macOS</title>
+<meta name="description" content="showmd is a free, native macOS Quick Look extension that renders Markdown beautifully. YAML frontmatter as a collapsible table, rendered and source toggle, dark mode. No account, no cloud.">
 <meta name="keywords" content="macOS, markdown, quick look, markdown viewer, YAML frontmatter, markdown preview, developer tools, open source">
 <meta name="author" content="Johannes Nagl">
-<link rel="canonical" href="https://show.md/">
+<link rel="canonical" href="https://mojo.tech/showmd/">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://show.md/">
-<meta property="og:title" content="show.md — The most readable way to preview any .md file on macOS">
+<meta property="og:url" content="https://mojo.tech/showmd/">
+<meta property="og:title" content="showmd — The most readable way to preview any .md file on macOS">
 <meta property="og:description" content="Free, native macOS Quick Look extension. Renders Markdown beautifully — YAML frontmatter as a collapsible table, rendered and source toggle, dark mode. No account, no cloud.">
-<meta property="og:site_name" content="show.md">
+<meta property="og:site_name" content="showmd">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://show.md/og-image.png">
+<meta property="og:image" content="https://mojo.tech/showmd/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="show.md — renders your Markdown files beautifully in macOS Quick Look">
+<meta property="og:image:alt" content="showmd — renders your Markdown files beautifully in macOS Quick Look">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="show.md — The most readable way to preview any .md file on macOS">
+<meta name="twitter:title" content="showmd — The most readable way to preview any .md file on macOS">
 <meta name="twitter:description" content="Free, native macOS Quick Look extension. Renders Markdown beautifully — YAML frontmatter as a collapsible table, rendered and source toggle, dark mode.">
-<meta name="twitter:image" content="https://show.md/og-image.png">
+<meta name="twitter:image" content="https://mojo.tech/showmd/og-image.png">
 
 <!-- Favicons -->
-<link rel="icon" href="/icon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./site.webmanifest">
 
 <!-- Theme -->
 <meta name="theme-color" content="#0A0A0A" media="(prefers-color-scheme: dark)">
@@ -55,11 +55,11 @@
 {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  "name": "show.md",
+  "name": "showmd",
   "operatingSystem": "macOS 13+",
   "applicationCategory": "DeveloperApplication",
   "description": "A free, native macOS Quick Look extension that renders Markdown files beautifully. Parses YAML frontmatter into a collapsible metadata table, supports rendered and source views, and respects system dark mode.",
-  "url": "https://show.md",
+  "url": "https://mojo.tech/showmd",
   "downloadUrl": "https://github.com/johannesnagl/show.md/releases/latest",
   "author": {
     "@type": "Person",
@@ -81,48 +81,48 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "How do I enable show.md in Finder?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Download show.md, open it once, then go to System Settings → Privacy & Security → Extensions → Quick Look. Enable show.md there. After that, pressing Space on any .md file in Finder will use show.md automatically." }
+      "name": "How do I enable showmd in Finder?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Download showmd, open it once, then go to System Settings → Privacy & Security → Extensions → Quick Look. Enable showmd there. After that, pressing Space on any .md file in Finder will use showmd automatically." }
     },
     {
       "@type": "Question",
       "name": "What happens to YAML frontmatter?",
-      "acceptedAnswer": { "@type": "Answer", "text": "show.md parses the --- block at the top of your file and renders it as a collapsible metadata table. It's collapsed by default so it never gets in the way, but one click expands it to show all key-value pairs. Supports plain values, quoted strings, arrays, and multi-line folded blocks." }
+      "acceptedAnswer": { "@type": "Answer", "text": "showmd parses the --- block at the top of your file and renders it as a collapsible metadata table. It's collapsed by default so it never gets in the way, but one click expands it to show all key-value pairs. Supports plain values, quoted strings, arrays, and multi-line folded blocks." }
     },
     {
       "@type": "Question",
       "name": "Can I see the raw Markdown source?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes. show.md has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, click Rendered to go back. You can also copy the file as HTML from the Rendered view." }
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes. showmd has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, click Rendered to go back. You can also copy the file as HTML from the Rendered view." }
     },
     {
       "@type": "Question",
-      "name": "Does show.md support dark mode?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes — show.md follows your macOS appearance setting automatically. You can also override it in the show.md settings: choose Light, Dark, or Auto." }
+      "name": "Does showmd support dark mode?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — showmd follows your macOS appearance setting automatically. You can also override it in showmd's settings: choose Light, Dark, or Auto." }
     },
     {
       "@type": "Question",
-      "name": "What markdown features does show.md support?",
-      "acceptedAnswer": { "@type": "Answer", "text": "show.md supports full GitHub Flavored Markdown (GFM) including tables, task lists, strikethrough, and fenced code blocks. It also adds syntax highlighting for 190+ languages, math rendering (LaTeX via KaTeX), emoji shortcodes, footnotes, highlight/superscript/subscript syntax, smart quotes, and optional Mermaid diagrams. Everything renders offline — no internet required." }
+      "name": "What markdown features does showmd support?",
+      "acceptedAnswer": { "@type": "Answer", "text": "showmd supports full GitHub Flavored Markdown (GFM) including tables, task lists, strikethrough, and fenced code blocks. It also adds syntax highlighting for 190+ languages, math rendering (LaTeX via KaTeX), emoji shortcodes, footnotes, highlight/superscript/subscript syntax, smart quotes, and optional Mermaid diagrams. Everything renders offline — no internet required." }
     },
     {
       "@type": "Question",
-      "name": "Which file extensions does show.md handle?",
-      "acceptedAnswer": { "@type": "Answer", "text": "show.md handles .md, .markdown, .mdx, .mdc, .rmd, .qmd, .mdown, .mkd, .mkdn, .mdtext, and .mdtxt files. All are recognized automatically in Finder's Quick Look." }
+      "name": "Which file extensions does showmd handle?",
+      "acceptedAnswer": { "@type": "Answer", "text": "showmd handles .md, .markdown, .mdx, .mdc, .rmd, .qmd, .mdown, .mkd, .mkdn, .mdtext, and .mdtxt files. All are recognized automatically in Finder's Quick Look." }
     },
     {
       "@type": "Question",
-      "name": "What other tools work like show.md?",
-      "acceptedAnswer": { "@type": "Answer", "text": "The closest alternatives are other macOS Quick Look extensions for Markdown: Markdown Preview by Anybox ($2.99 on the App Store) is the most direct competitor, and QLMarkdown is a free, open-source option without a standalone app. show.md differentiates itself by being free, open source, hassle-free to install (one command via Homebrew), and offering a full feature set — YAML frontmatter, syntax highlighting, math, Mermaid diagrams, and a settings app — all in one package." }
+      "name": "What other tools work like showmd?",
+      "acceptedAnswer": { "@type": "Answer", "text": "The closest alternatives are other macOS Quick Look extensions for Markdown: Markdown Preview by Anybox ($2.99 on the App Store) is the most direct competitor, and QLMarkdown is a free, open-source option without a standalone app. showmd differentiates itself by being free, open source, hassle-free to install (one command via Homebrew), and offering a full feature set — YAML frontmatter, syntax highlighting, math, Mermaid diagrams, and a settings app — all in one package." }
     },
     {
       "@type": "Question",
-      "name": "Is show.md an editor?",
-      "acceptedAnswer": { "@type": "Answer", "text": "No. show.md is a viewer only — a Quick Look extension. It opens files read-only. Its job is to get out of the way as fast as possible." }
+      "name": "Is showmd an editor?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. showmd is a viewer only — a Quick Look extension. It opens files read-only. Its job is to get out of the way as fast as possible." }
     },
     {
       "@type": "Question",
-      "name": "Is show.md free?",
-      "acceptedAnswer": { "@type": "Answer", "text": "Yes — show.md is completely free and open source under the MIT license. The source code is available on GitHub. If it saves you a trip to VS Code, you can optionally buy the developer a pasta." }
+      "name": "Is showmd free?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Yes — showmd is completely free and open source under the MIT license. The source code is available on GitHub. If it saves you a trip to VS Code, you can optionally buy the developer a pasta." }
     }
   ]
 }
@@ -619,7 +619,7 @@
   .app-state { display: none; }
   .app-state.visible { display: block; }
 
-  /* state 1: show.md */
+  /* state 1: showmd */
   .app-body {
     padding: 28px 32px;
   }
@@ -1529,7 +1529,7 @@
 
 <header role="banner">
 <nav aria-label="Main navigation">
-  <a href="/" class="nav-logo" aria-label="show.md — home">
+  <a href="./" class="nav-logo" aria-label="showmd — home">
     <svg width="24" height="24" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <path d="M 29,52 L 12,52 Q 9,52 9,49 L 9,8 Q 9,5 12,5 L 41,5 Q 44,5 44,8 L 44,36"
             fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1539,7 +1539,7 @@
       <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="currentColor" stroke-width="1.5"/>
       <line x1="50" y1="55" x2="55" y2="59" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
     </svg>
-    <span>show</span>md
+    <span>show</span><strong>md</strong>
   </a>
   <ul class="nav-links">
     <li><a href="#features">features</a></li>
@@ -1586,7 +1586,7 @@
         <div class="dot dot-y"></div>
         <div class="dot dot-g"></div>
         <div class="finder-nav-arrows"><span>‹</span><span>›</span></div>
-        <span class="finder-window-title">show.md</span>
+        <span class="finder-window-title">showmd</span>
       </div>
       <div class="finder-body">
         <div class="finder-sidebar">
@@ -1729,7 +1729,7 @@ $ npm run build · npm test · npm run lint</div>
   <section class="fm-section" aria-labelledby="fm-heading">
     <div class="fm-inner">
       <div class="fm-text">
-        <p class="fm-eyebrow">unique to show.md</p>
+        <p class="fm-eyebrow">unique to showmd</p>
         <h2 class="fm-title" id="fm-heading">Built for how<br><em>markdown is actually used today.</em></h2>
         <p class="fm-desc">YAML frontmatter parsed into a collapsible metadata table — collapsed by default, one click to expand. No other viewer does this.</p>
         <p class="fm-desc">Agentic AI XML tags — <code>&lt;example&gt;</code>, <code>&lt;instructions&gt;</code>, <code>&lt;thinking&gt;</code>, and 17 more — rendered as labeled, bordered blocks instead of raw angle brackets.</p>
@@ -1752,7 +1752,7 @@ $ npm run build · npm test · npm run lint</div>
         </div>
         <div class="fm-arrow">→</div>
         <div class="fm-after">
-          <div class="fm-visual-label">show.md renders</div>
+          <div class="fm-visual-label">showmd renders</div>
           <div class="fm-rendered">
             <div class="fm-details">
               <div class="fm-summary">
@@ -1802,7 +1802,7 @@ $ npm run build · npm test · npm run lint</div>
       <div class="feature">
         <div class="feature-icon">≡</div>
         <h3 class="feature-title">Frontmatter rendering</h3>
-        <p class="feature-desc">YAML metadata rendered as a collapsible table. Collapsed by default, one click to expand. Unique to show.md.</p>
+        <p class="feature-desc">YAML metadata rendered as a collapsible table. Collapsed by default, one click to expand. Unique to showmd.</p>
       </div>
       <div class="feature">
         <div class="feature-icon">◎</div>
@@ -1899,7 +1899,7 @@ $ npm run build · npm test · npm run lint</div>
       <div class="install-row">
         <div class="install-row-left">
           <div class="install-method">Direct download</div>
-          <div class="install-cmd">show.md.zip — signed &amp; notarized</div>
+          <div class="install-cmd">showmd.zip — signed &amp; notarized</div>
         </div>
         <a href="https://github.com/johannesnagl/show.md/releases/latest" class="install-btn" rel="noopener" target="_blank">Download v1.0.0</a>
       </div>
@@ -1922,39 +1922,39 @@ $ npm run build · npm test · npm run lint</div>
     </div>
     <dl class="faq-list reveal">
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a1">How do I enable show.md in Finder? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a1">Download show.md, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable show.md there. After that, pressing Space on any .md file in Finder will use show.md automatically.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a1">How do I enable showmd in Finder? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a1">Download showmd, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable showmd there. After that, pressing Space on any .md file in Finder will use showmd automatically.</dd>
       </div>
       <div class="faq-item">
         <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a2">What happens to YAML frontmatter? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a2">show.md parses the <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">---</code> block and renders it as a collapsible metadata table — collapsed by default so it never gets in the way. Supports plain values, quoted strings, arrays, and multi-line folded blocks.</dd>
+        <dd class="faq-answer" id="faq-a2">showmd parses the <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">---</code> block and renders it as a collapsible metadata table — collapsed by default so it never gets in the way. Supports plain values, quoted strings, arrays, and multi-line folded blocks.</dd>
       </div>
       <div class="faq-item">
         <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a3">Can I see the raw Markdown source? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a3">Yes. show.md has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, Rendered to go back. You can also copy the file as HTML from the Rendered view.</dd>
+        <dd class="faq-answer" id="faq-a3">Yes. showmd has a Rendered / Source toggle at the top of every preview. Click Source to see the original Markdown, Rendered to go back. You can also copy the file as HTML from the Rendered view.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a4">Does show.md support dark mode? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a4">Yes — show.md follows your macOS appearance setting automatically. You can also override it in show.md's settings: choose Light, Dark, or Auto.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a4">Does showmd support dark mode? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a4">Yes — showmd follows your macOS appearance setting automatically. You can also override it in showmd's settings: choose Light, Dark, or Auto.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a5">What markdown features does show.md support? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a5">What markdown features does showmd support? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
         <dd class="faq-answer" id="faq-a5">Full GitHub Flavored Markdown (GFM) — tables, task lists, strikethrough, fenced code blocks. Plus syntax highlighting for 190+ languages, math rendering (LaTeX via KaTeX), emoji shortcodes, footnotes, highlight/superscript/subscript syntax, smart quotes, optional Mermaid diagrams, GitHub-style alerts (NOTE, TIP, WARNING, etc.), and styled agentic AI XML tags. Everything renders offline with no internet needed.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a6">Which file extensions does show.md handle? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a6">Which file extensions does showmd handle? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
         <dd class="faq-answer" id="faq-a6"><code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.md</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.markdown</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mdx</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mdc</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.rmd</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.qmd</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mdown</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mkd</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mkdn</code>, <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mdtext</code>, and <code style="font-family:ui-monospace,monospace;font-size:12px;background:var(--grid-line);padding:1px 5px;border-radius:3px">.mdtxt</code>. All recognized automatically in Finder Quick Look.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a7">What other tools work like show.md? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a7">The closest alternatives are other macOS Quick Look extensions for Markdown. <a href="https://apps.apple.com/app/markdown-preview/id1622698025" target="_blank" rel="noopener"><strong>Markdown Preview by Anybox</strong></a> ($2.99 on the App Store) is the most direct competitor. <a href="https://github.com/sbarex/QLMarkdown" target="_blank" rel="noopener"><strong>QLMarkdown</strong></a> is free and open source but doesn't include a standalone settings app. show.md sets itself apart by being free, open source, hassle-free to install (one command via Homebrew), and feature-complete — YAML frontmatter, syntax highlighting, math, Mermaid diagrams, and a settings app — all in one package.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a7">What other tools work like showmd? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a7">The closest alternatives are other macOS Quick Look extensions for Markdown. <a href="https://apps.apple.com/app/markdown-preview/id1622698025" target="_blank" rel="noopener"><strong>Markdown Preview by Anybox</strong></a> ($2.99 on the App Store) is the most direct competitor. <a href="https://github.com/sbarex/QLMarkdown" target="_blank" rel="noopener"><strong>QLMarkdown</strong></a> is free and open source but doesn't include a standalone settings app. showmd sets itself apart by being free, open source, hassle-free to install (one command via Homebrew), and feature-complete — YAML frontmatter, syntax highlighting, math, Mermaid diagrams, and a settings app — all in one package.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a8">Is show.md an editor? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a8">No. show.md is a viewer only — a Quick Look extension. It opens files read-only. Its job is to render your markdown and get out of the way.</dd>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a8">Is showmd an editor? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dd class="faq-answer" id="faq-a8">No. showmd is a viewer only — a Quick Look extension. It opens files read-only. Its job is to render your markdown and get out of the way.</dd>
       </div>
       <div class="faq-item">
-        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a9">Is show.md free? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
+        <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a9">Is showmd free? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
         <dd class="faq-answer" id="faq-a9">Yes — completely free and open source under the MIT license. Source on GitHub. If it saves you a trip to VS Code, you can optionally buy the developer a pasta.</dd>
       </div>
     </dl>
@@ -1993,7 +1993,7 @@ $ npm run build · npm test · npm run lint</div>
 </main>
 
 <footer role="contentinfo">
-  <a href="/" class="footer-logo">
+  <a href="./" class="footer-logo">
     <svg width="18" height="18" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
       <path d="M 29,52 L 12,52 Q 9,52 9,49 L 9,8 Q 9,5 12,5 L 41,5 Q 44,5 44,8 L 44,36"
             fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2003,7 +2003,7 @@ $ npm run build · npm test · npm run lint</div>
       <circle cx="41" cy="48" r="12" fill="rgba(62,181,176,0.07)" stroke="currentColor" stroke-width="1.5"/>
       <line x1="50" y1="55" x2="55" y2="59" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
     </svg>
-    <span>show</span>md
+    <span>show</span><strong>md</strong>
   </a>
   <ul class="footer-links">
     <li><a href="https://github.com/johannesnagl/show.md/releases/latest" rel="noopener" target="_blank">download</a></li>

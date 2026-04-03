@@ -1,4 +1,4 @@
-name: show.md
+name: showmd
 options:
   bundleIdPrefix: io.github.showmd
   deploymentTarget:
@@ -19,7 +19,7 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: io.github.showmd.app
-        PRODUCT_NAME: show.md
+        PRODUCT_NAME: showmd
         MACOSX_DEPLOYMENT_TARGET: "26.0"
         ENABLE_HARDENED_RUNTIME: YES
         SWIFT_VERSION: "5.9"

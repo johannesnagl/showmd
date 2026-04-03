@@ -1,12 +1,12 @@
 ---
 title: Feature Showcase
-author: show.md
+author: showmd
 version: 1.0
 ---
 
-# show.md Feature Showcase
+# showmd Feature Showcase
 
-This file exercises all rendering features supported by show.md. Open it in Finder with Quick Look (press Space) to verify each feature renders correctly.
+This file exercises all rendering features supported by showmd. Open it in Finder with Quick Look (press Space) to verify each feature renders correctly.
 
 ---
 
@@ -192,7 +192,7 @@ Below the rule.
 
 ## Inline Image
 
-![show.md logo](../../docs/icon.svg)
+![showmd logo](../../docs/icon.svg)
 
 ---
 

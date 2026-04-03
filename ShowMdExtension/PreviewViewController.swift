@@ -134,19 +134,19 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
     // MARK: - WKNavigationDelegate
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        NSLog("[show.md] WKWebView didFinish navigation")
+        NSLog("[showmd] WKWebView didFinish navigation")
     }
 
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
-        NSLog("[show.md] WKWebView didFail: %@", error.localizedDescription)
+        NSLog("[showmd] WKWebView didFail: %@", error.localizedDescription)
     }
 
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
-        NSLog("[show.md] WKWebView didFailProvisionalNavigation: %@", error.localizedDescription)
+        NSLog("[showmd] WKWebView didFailProvisionalNavigation: %@", error.localizedDescription)
     }
 
     func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
-        NSLog("[show.md] WebContent process TERMINATED — HTML too large or JS crash")
+        NSLog("[showmd] WebContent process TERMINATED — HTML too large or JS crash")
         let html = MarkdownRenderer.renderCombined(
             markdownSource,
             theme: Settings.theme,

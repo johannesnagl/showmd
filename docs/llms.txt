@@ -1,8 +1,8 @@
-# show.md
+# showmd
 
 > The most readable way to preview any .md file on macOS.
 
-show.md is a free, native macOS Quick Look extension that renders Markdown beautifully. Press Space on any Markdown file in Finder and get an instant, rich preview.
+showmd is a free, native macOS Quick Look extension that renders Markdown beautifully. Press Space on any Markdown file in Finder and get an instant, rich preview.
 
 ## Install
 
@@ -42,7 +42,7 @@ Dependencies: apple/swift-markdown for parsing, highlight.js for syntax highligh
 
 ## Links
 
-- Website: https://show.md
+- Website: https://mojo.tech/showmd
 - GitHub: https://github.com/johannesnagl/show.md
 - Author: Johannes Nagl
 

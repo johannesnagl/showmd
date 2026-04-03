@@ -1,14 +1,14 @@
 {
-  "name": "show.md",
-  "short_name": "show.md",
+  "name": "showmd",
+  "short_name": "showmd",
   "description": "The most readable way to preview any .md file on macOS.",
-  "start_url": "/",
+  "start_url": "./",
   "display": "browser",
   "background_color": "#0A0A0A",
   "theme_color": "#0A0A0A",
   "icons": [
-    { "src": "/favicon-32.png", "sizes": "32x32", "type": "image/png" },
-    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }
+    { "src": "./favicon-32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "./apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml" }
   ]
 }

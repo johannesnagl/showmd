@@ -3,7 +3,7 @@ import SwiftUI
 @main
 struct ShowMdApp: App {
     var body: some Scene {
-        WindowGroup("show.md") {
+        WindowGroup("showmd") {
             ContentView()
         }
         .windowResizability(.contentSize)

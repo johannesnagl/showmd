@@ -36,7 +36,7 @@ private func checkExtensionEnabled(completion: @escaping (Bool) -> Void) {
 
 // MARK: - Logo
 
-/// The show.md logo drawn natively in SwiftUI — document with magnifier.
+/// The showmd logo drawn natively in SwiftUI — document with magnifier.
 private struct LogoView: View {
     var size: CGFloat = 64
 
@@ -144,7 +144,7 @@ struct ContentView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 HStack(alignment: .firstTextBaseline, spacing: 6) {
-                    Text("show.md")
+                    Text("showmd")
                         .font(.title2)
                         .fontWeight(.semibold)
                     Text("v\(version)")
@@ -237,7 +237,7 @@ struct ContentView: View {
             }
             Text("  ·  ")
                 .foregroundStyle(.quaternary)
-            Link(destination: URL(string: "https://show.md")!) {
+            Link(destination: URL(string: "https://mojo.tech/showmd")!) {
                 Label("Website", systemImage: "globe")
             }
             Text("  ·  ")

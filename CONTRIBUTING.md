@@ -1,4 +1,4 @@
-# Contributing to show.md
+# Contributing to showmd
 
 Thanks for your interest in contributing! Please follow these guidelines.
 
@@ -23,7 +23,7 @@ Thanks for your interest in contributing! Please follow these guidelines.
 
 1. Install [XcodeGen](https://github.com/yonaskolb/xcodegen): `brew install xcodegen`
 2. Generate the Xcode project: `xcodegen generate`
-3. Open `show.md.xcodeproj` in Xcode
+3. Open `showmd.xcodeproj` in Xcode
 4. Set your Development Team in Signing & Capabilities for both targets
 
 ## Running Tests

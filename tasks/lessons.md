@@ -1,4 +1,4 @@
-# Lessons Learned — show.md
+# Lessons Learned — showmd
 
 ## Project
 
@@ -288,9 +288,9 @@ The `tests/fixtures/` directory contains comprehensive `.md` files that exercise
 1. Set DEVELOPMENT_TEAM in Xcode for both targets
 2. Archive → Distribute → Developer ID
 3. `xcrun notarytool submit ... --wait`
-4. `xcrun stapler staple show.md.app`
-5. `ditto -c -k --sequesterRsrc --keepParent show.md.app show.md-VERSION.zip`
-6. `shasum -a 256 show.md-VERSION.zip` → use in Homebrew cask
+4. `xcrun stapler staple showmd.app`
+5. `ditto -c -k --sequesterRsrc --keepParent showmd.app showmd-VERSION.zip`
+6. `shasum -a 256 showmd-VERSION.zip` → use in Homebrew cask
 7. `git tag vVERSION && git push origin main --tags`
 8. Create GitHub release, upload zip + sha256
 9. Update `Casks/show-md.rb` in homebrew-tap repo
