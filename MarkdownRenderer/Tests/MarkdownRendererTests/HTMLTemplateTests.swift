@@ -32,4 +32,89 @@ import Testing
         let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
         #expect(html.contains("color-scheme"))
     }
+
+    // MARK: - Rich features
+
+    @Test func wrapIncludesHighlightJS() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
+        #expect(html.contains("highlight.min.js"))
+        #expect(html.contains("github.min.css"))
+        #expect(html.contains("github-dark.min.css"))
+    }
+
+    @Test func wrapIncludesKaTeX() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
+        #expect(html.contains("katex.min.js"))
+        #expect(html.contains("auto-render.min.js"))
+        #expect(html.contains("katex.min.css"))
+    }
+
+    @Test func wrapIncludesMermaid() {
+        let html = HTMLTemplate.wrap(body: "", theme: .auto, fontSize: .medium)
+        #expect(html.contains("mermaid.min.js"))
+    }
+
+    @Test func wrapCombinedIncludesRichFeatures() {
+        let html = HTMLTemplate.wrapCombined(
+            renderedBody: "<p>hi</p>",
+            sourceBody: "<pre><code>hi</code></pre>",
+            theme: .auto,
+            fontSize: .medium,
+            defaultTab: .rendered
+        )
+        #expect(html.contains("highlight.min.js"))
+        #expect(html.contains("katex.min.js"))
+        #expect(html.contains("mermaid.min.js"))
+    }
+
+    @Test func wrapSourceDoesNotIncludeRichFeatures() {
+        let html = HTMLTemplate.wrapSource(body: "<pre><code>hi</code></pre>", fontSize: .medium)
+        #expect(!html.contains("highlight.min.js"))
+        #expect(!html.contains("katex.min.js"))
+        #expect(!html.contains("mermaid.min.js"))
+    }
+
+    // MARK: - Combined template
+
+    @Test func wrapCombinedDefaultTabRendered() {
+        let html = HTMLTemplate.wrapCombined(
+            renderedBody: "<p>rendered</p>",
+            sourceBody: "<pre><code>source</code></pre>",
+            theme: .auto,
+            fontSize: .medium,
+            defaultTab: .rendered
+        )
+        #expect(html.contains("class=\"tab-rendered\""))
+        #expect(html.contains("view-rendered"))
+        #expect(html.contains("view-source"))
+    }
+
+    @Test func wrapCombinedDefaultTabSource() {
+        let html = HTMLTemplate.wrapCombined(
+            renderedBody: "<p>rendered</p>",
+            sourceBody: "<pre><code>source</code></pre>",
+            theme: .auto,
+            fontSize: .medium,
+            defaultTab: .source
+        )
+        #expect(html.contains("class=\"tab-source\""))
+    }
+
+    // MARK: - Frontmatter
+
+    @Test func frontmatterHTMLRendersTable() {
+        let html = HTMLTemplate.frontmatterHTML([
+            (key: "title", value: "My Doc"),
+            (key: "author", value: "Alice")
+        ])
+        #expect(html.contains("<details class=\"frontmatter\">"))
+        #expect(html.contains("Metadata (2)"))
+        #expect(html.contains("<th>title</th>"))
+        #expect(html.contains("<td>My Doc</td>"))
+    }
+
+    @Test func frontmatterHTMLEmptyFieldsReturnsEmpty() {
+        let html = HTMLTemplate.frontmatterHTML([])
+        #expect(html == "")
+    }
 }

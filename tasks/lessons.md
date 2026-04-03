@@ -110,6 +110,63 @@ The single-argument closure form is deprecated on macOS 14+. Use the two-argumen
 - One commit per task. Review-loop fixes go into the same commit via `git commit --amend --no-edit`.
 - Empty scaffold directories must have `.gitkeep` files — git does not track empty directories.
 - To squash multiple commits into one: `GIT_SEQUENCE_EDITOR="perl -i -pe 's/^pick /fixup / if \$. >= 2 && \$. <= N'" git rebase -i --root` (remove any untracked files that could block the rebase first).
+- **Always commit all pending changes when the user asks.** Don't leave work uncommitted across sessions. Group related changes into a single descriptive commit.
+
+---
+
+## UTType Declarations for Custom File Extensions
+
+To support non-standard markdown extensions (`.mdx`, `.mdc`, `.rmd`, `.qmd`, `.mdown`, `.mkd`, `.mkdn`, `.mdtext`, `.mdtxt`):
+
+1. Declare `UTImportedTypeDeclarations` in the **host app's** `ShowMd/Info.plist` — this registers the custom UTTypes with the system.
+2. Add the custom UTType identifiers to `QLSupportedContentTypes` in `ShowMdExtension/Info.plist` — this tells the Quick Look extension to handle them.
+3. Use a consistent naming convention: `io.github.showmd.<ext>` for the UTType identifiers.
+4. Each UTType must conform to `public.plain-text` and specify `public.filename-extension` in `UTTypeTagSpecification`.
+
+---
+
+## Rich Feature Rendering (Syntax Highlighting, KaTeX, Mermaid)
+
+- CDN scripts load fine in WKWebView because the extension has `com.apple.security.network.client` entitlement — no need to bundle ~1MB of JS libraries.
+- CDN URLs used: highlight.js 11.9.0 (github/github-dark themes), KaTeX 0.16.9, Mermaid 10.
+- Mermaid blocks require special handling in `HTMLVisitor`: detect `language == "mermaid"` and emit `<pre class="mermaid">` instead of `<pre><code class="language-mermaid">`.
+- Syntax highlighting is restricted to code blocks with an explicit language class (`pre code[class*="language-"]`) to avoid highlighting plain code blocks.
+- KaTeX auto-render uses `$...$` (inline) and `$$...$$` (block) delimiters, with `ignoredTags` to avoid rendering inside `<pre>`, `<code>`, etc.
+
+---
+
+## Testing
+
+**Tests are vital and must never be forgotten.** Every new feature or behavioral change to the `MarkdownRenderer` package MUST have corresponding tests before committing. No exceptions.
+
+### Test coverage requirements
+
+When adding a feature, always add tests for:
+1. The **happy path** — basic functionality works
+2. **Edge cases** — empty input, special characters, HTML escaping
+3. **Negative cases** — e.g. source-only template should NOT include rich feature scripts
+
+### Current test suites (51 tests total)
+
+| Suite | What it covers |
+|-------|---------------|
+| `HTMLVisitorTests` | Every markdown element → HTML conversion: text, bold, italic, inline code, links, images, headings, code blocks (plain + language-specific + mermaid), blockquotes, lists, tables, task lists, strikethrough, HTML escaping |
+| `HTMLTemplateTests` | Template wrapping: DOCTYPE, body injection, theme attribute, font size, source body class, color-scheme meta, rich feature CDN inclusion (highlight.js, KaTeX, Mermaid), combined template tabs, frontmatter HTML |
+| `MarkdownRendererTests` | Public API: full render, theme application, font size, source HTML escaping |
+| `SettingsTests` | UserDefaults round-trips for all settings, defaults, CSS values, unknown raw value fallback |
+
+### Running tests
+
+```bash
+cd MarkdownRenderer && swift test
+```
+
+### What's NOT yet tested (future work)
+
+- `renderCombined()` public API (combines rendered + source views)
+- `renderBody()` public API (returns HTML body without template wrapper)
+- Frontmatter parsing integration (YAML → metadata table)
+- WKWebView rendering (requires UI test target, not unit-testable in SPM)
 
 ---
 

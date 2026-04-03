@@ -63,8 +63,25 @@ import Markdown
         #expect(html.contains("let x = 1"))
     }
 
+    @Test func codeBlockWithLanguage() {
+        let html = render("```swift\nlet x = 1\n```")
+        #expect(html.contains("<code class=\"language-swift\">"))
+    }
+
     @Test func codeBlockHTMLEscaping() {
         #expect(render("```\n<div>\n```").contains("&lt;div&gt;"))
+    }
+
+    @Test func mermaidCodeBlock() {
+        let html = render("```mermaid\ngraph TD\n  A --> B\n```")
+        #expect(html.contains("<pre class=\"mermaid\">"))
+        #expect(!html.contains("<code"))
+        #expect(html.contains("graph TD"))
+    }
+
+    @Test func mermaidCodeBlockEscapesHTML() {
+        let html = render("```mermaid\nA --> B[\"<script>\"]\n```")
+        #expect(html.contains("&lt;script&gt;"))
     }
 
     @Test func blockquote() {
