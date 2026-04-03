@@ -1,0 +1,51 @@
+# show.md
+
+> The most readable way to preview any .md file on macOS.
+
+show.md is a free, native macOS Quick Look extension that renders Markdown beautifully. Press Space on any Markdown file in Finder and get an instant, rich preview.
+
+## Install
+
+```
+brew install --cask show-md
+```
+
+Then enable in System Settings → Privacy & Security → Extensions → Quick Look.
+
+## Features
+
+- Full GitHub Flavored Markdown: tables, task lists, strikethrough, fenced code blocks
+- Syntax highlighting for 190+ languages (highlight.js, bundled offline)
+- Math rendering via KaTeX, inline $...$ and block $$...$$
+- Mermaid diagrams (optional, toggle in settings)
+- YAML frontmatter parsed as a collapsible metadata table
+- GitHub-style alerts: NOTE, TIP, IMPORTANT, WARNING, CAUTION
+- Agentic AI XML tag styling for prompt engineering files
+- Emoji shortcodes: :rocket: becomes a rocket emoji
+- Footnotes, highlight (==text==), superscript (x^2^), subscript (H~2~O), smart quotes
+- Rendered / Source toggle to switch between HTML and raw Markdown
+- Copy as HTML
+- Dark mode: follows macOS appearance, or override (Light / Dark / Auto)
+- Adjustable font size: Small, Medium, Large
+- Fully offline: all JS/CSS dependencies are bundled, no network needed
+- XSS-hardened: all user content is escaped and raw HTML is sanitized
+
+## Supported File Extensions
+
+.md, .markdown, .mdx, .mdc, .rmd, .qmd, .mdown, .mkd, .mkdn, .mdtext, .mdtxt
+
+## Architecture
+
+Native macOS app with a Quick Look preview extension. The MarkdownRenderer Swift package is shared between the host app (SwiftUI settings window) and the extension. Settings sync via App Groups.
+
+Dependencies: apple/swift-markdown for parsing, highlight.js for syntax highlighting, KaTeX for math, Mermaid for diagrams — all bundled offline.
+
+## Links
+
+- Website: https://show.md
+- GitHub: https://github.com/johannesnagl/show.md
+- Author: Johannes Nagl
+
+## License
+
+MIT
