@@ -9,7 +9,7 @@ public enum MarkdownRenderer {
         let fm = FrontmatterParser.parse(markdown)
         let document = Document(parsing: fm.body)
         var visitor = HTMLVisitor()
-        let contentBody = visitor.visit(document)
+        let contentBody = HTMLPostProcessor.process(visitor.visit(document))
         let body = HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
         return HTMLTemplate.wrap(body: body, theme: theme, fontSize: fontSize)
     }
@@ -19,7 +19,7 @@ public enum MarkdownRenderer {
         let fm = FrontmatterParser.parse(markdown)
         let document = Document(parsing: fm.body)
         var visitor = HTMLVisitor()
-        let contentBody = visitor.visit(document)
+        let contentBody = HTMLPostProcessor.process(visitor.visit(document))
         return HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
     }
 
@@ -32,7 +32,7 @@ public enum MarkdownRenderer {
         let fm = FrontmatterParser.parse(markdown)
         let document = Document(parsing: fm.body)
         var visitor = HTMLVisitor()
-        let contentBody = visitor.visit(document)
+        let contentBody = HTMLPostProcessor.process(visitor.visit(document))
         let renderedBody = HTMLTemplate.frontmatterHTML(fm.fields) + contentBody
         // Source view shows the full original markdown including frontmatter
         let escaped = markdown

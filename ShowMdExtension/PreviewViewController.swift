@@ -9,6 +9,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     private var copyButton: NSButton!
     private var markdownSource = ""
     private var renderedHTML = ""
+    private var fileDirectoryURL: URL?
     private var currentTab: Settings.Tab = Settings.defaultTab
 
     override func viewDidLoad() {
@@ -79,6 +80,7 @@ let config = WKWebViewConfiguration()
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
                     self.copyButton?.isHidden = self.currentTab != .rendered
                     self.markdownSource = source
+                    self.fileDirectoryURL = url.deletingLastPathComponent()
                     self.loadCombined()
                     handler(nil)
                 }
@@ -115,6 +117,6 @@ let config = WKWebViewConfiguration()
             fontSize: Settings.fontSize,
             defaultTab: currentTab
         )
-        webView.loadHTMLString(html, baseURL: nil)
+        webView.loadHTMLString(html, baseURL: fileDirectoryURL)
     }
 }

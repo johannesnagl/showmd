@@ -84,6 +84,14 @@ import Markdown
         #expect(html.contains("&lt;script&gt;"))
     }
 
+    @Test func mathCodeBlock() {
+        let html = render("```math\nE = mc^2\n```")
+        #expect(html.contains("katex-display"))
+        #expect(html.contains("$$"))
+        #expect(html.contains("E = mc^2"))
+        #expect(!html.contains("<code"))
+    }
+
     @Test func blockquote() {
         let html = render("> quote")
         #expect(html.contains("<blockquote>"))

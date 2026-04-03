@@ -261,5 +261,23 @@ public enum HTMLTemplate {
           font-size: 0.85em;
         }
         details.frontmatter th { width: 30%; }
+        mark {
+          background: rgba(255, 230, 0, 0.35);
+          padding: 1px 3px;
+          border-radius: 2px;
+        }
+        [data-theme="dark"] mark { background: rgba(255, 230, 0, 0.2); }
+        @media (prefers-color-scheme: dark) {
+          :root mark { background: rgba(255, 230, 0, 0.2); }
+        }
+        sup.footnote-ref a {
+          text-decoration: none;
+          color: var(--link);
+          font-weight: 600;
+        }
+        .footnotes-sep { margin-top: 32px; }
+        .footnotes { font-size: 0.85em; opacity: 0.85; }
+        .footnotes ol { padding-left: 20px; }
+        .footnote-backref { text-decoration: none; margin-left: 4px; }
         """
 }

@@ -68,6 +68,9 @@ struct HTMLVisitor: MarkupVisitor {
         if codeBlock.language == "mermaid" {
             return "<pre class=\"mermaid\">\(escape(codeBlock.code))</pre>\n"
         }
+        if codeBlock.language == "math" {
+            return "<div class=\"katex-display\">$$\(codeBlock.code)$$</div>\n"
+        }
         let lang = codeBlock.language.map { " class=\"language-\($0)\"" } ?? ""
         return "<pre><code\(lang)>\(escape(codeBlock.code))</code></pre>\n"
     }
