@@ -3,7 +3,7 @@ import Quartz
 import WebKit
 import MarkdownRenderer
 
-class PreviewViewController: NSViewController, QLPreviewingController {
+class PreviewViewController: NSViewController, QLPreviewingController, WKNavigationDelegate {
     private var webView: WKWebView?
     private var segmentedControl: NSSegmentedControl!
     private var copyButton: NSButton!
@@ -15,6 +15,11 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     private var lastTheme: Settings.Theme = Settings.theme
     private var lastFontSize: Settings.FontSize = Settings.fontSize
     private var lastMermaid: Bool = Settings.mermaidEnabled
+
+    private static let imgSrcPattern = try! NSRegularExpression(
+        pattern: #"(<img\s[^>]*?\bsrc\s*=\s*")((?!data:|https?://)[^"]+)(")"#,
+        options: .caseInsensitive
+    )
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +37,6 @@ class PreviewViewController: NSViewController, QLPreviewingController {
 
     @objc private func settingsChanged() {
         guard !markdownSource.isEmpty else { return }
-        // Only re-render when relevant settings actually changed
         let newTheme = Settings.theme
         let newFontSize = Settings.fontSize
         let newMermaid = Settings.mermaidEnabled
@@ -63,6 +67,7 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         let config = WKWebViewConfiguration()
         let wv = WKWebView(frame: .zero, configuration: config)
         wv.translatesAutoresizingMaskIntoConstraints = false
+        wv.navigationDelegate = self
         webView = wv
 
         view.addSubview(segmentedControl)
@@ -84,13 +89,16 @@ class PreviewViewController: NSViewController, QLPreviewingController {
     }
 
     func preparePreviewOfFile(at url: URL, completionHandler handler: @escaping (Error?) -> Void) {
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        // No [weak self] — these are one-shot dispatch blocks, not stored closures.
+        // The view controller MUST stay alive until content is loaded; using weak self
+        // here caused blank previews because QL can release the controller before the
+        // main-queue callback runs (the view stays in the window, but self is nil).
+        DispatchQueue.global(qos: .userInitiated).async {
             let accessing = url.startAccessingSecurityScopedResource()
             defer { if accessing { url.stopAccessingSecurityScopedResource() } }
             do {
                 let source = try String(contentsOf: url, encoding: .utf8)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { handler(nil); return }
+                DispatchQueue.main.async {
                     self.currentTab = Settings.defaultTab
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
                     self.copyButton?.isHidden = self.currentTab != .rendered
@@ -123,16 +131,86 @@ class PreviewViewController: NSViewController, QLPreviewingController {
         }
     }
 
+    // MARK: - WKNavigationDelegate
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        NSLog("[show.md] WKWebView didFinish navigation")
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        NSLog("[show.md] WKWebView didFail: %@", error.localizedDescription)
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        NSLog("[show.md] WKWebView didFailProvisionalNavigation: %@", error.localizedDescription)
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+        NSLog("[show.md] WebContent process TERMINATED — HTML too large or JS crash")
+        let html = MarkdownRenderer.renderCombined(
+            markdownSource,
+            theme: Settings.theme,
+            fontSize: Settings.fontSize,
+            defaultTab: currentTab,
+            mermaid: false
+        )
+        webView.loadHTMLString(html, baseURL: fileDirectoryURL)
+    }
+
+    // MARK: - Image inlining
+
+    /// Replace relative image src attributes with base64 data URIs so they render
+    /// inside the sandboxed WKWebView (which cannot load local file:// resources).
+    private func inlineLocalImages(in html: String, baseDirectory: URL) -> String {
+        let mutable = NSMutableString(string: html)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        let matches = Self.imgSrcPattern.matches(in: html, range: fullRange).reversed()
+
+        for match in matches {
+            guard let srcRange = Range(match.range(at: 2), in: html) else { continue }
+            let relativePath = String(html[srcRange])
+
+            let fileURL = baseDirectory.appendingPathComponent(relativePath)
+            guard FileManager.default.fileExists(atPath: fileURL.path),
+                  let data = try? Data(contentsOf: fileURL) else { continue }
+
+            let mime = Self.mimeType(for: fileURL.pathExtension)
+            let dataURI = "data:\(mime);base64,\(data.base64EncodedString())"
+
+            mutable.replaceCharacters(in: match.range(at: 2), with: dataURI)
+        }
+        return mutable as String
+    }
+
+    private static func mimeType(for ext: String) -> String {
+        switch ext.lowercased() {
+        case "png": return "image/png"
+        case "jpg", "jpeg": return "image/jpeg"
+        case "gif": return "image/gif"
+        case "svg": return "image/svg+xml"
+        case "webp": return "image/webp"
+        case "avif": return "image/avif"
+        case "ico": return "image/x-icon"
+        case "bmp": return "image/bmp"
+        default: return "application/octet-stream"
+        }
+    }
+
+    // MARK: - Rendering
+
     private func loadCombined() {
         guard let webView else { return }
         renderedHTML = MarkdownRenderer.renderBody(markdownSource)
-        let html = MarkdownRenderer.renderCombined(
+        var html = MarkdownRenderer.renderCombined(
             markdownSource,
             theme: Settings.theme,
             fontSize: Settings.fontSize,
             defaultTab: currentTab,
             mermaid: Settings.mermaidEnabled
         )
+        if let baseDir = fileDirectoryURL {
+            html = inlineLocalImages(in: html, baseDirectory: baseDir)
+        }
         webView.loadHTMLString(html, baseURL: fileDirectoryURL)
     }
 }

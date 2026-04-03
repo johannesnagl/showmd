@@ -78,6 +78,44 @@ DispatchQueue.global(qos: .userInitiated).async {
 }
 ```
 
+### NEVER use [weak self] in preparePreviewOfFile dispatch closures
+
+**CRITICAL: The dispatch closures inside `preparePreviewOfFile` MUST capture `self` strongly (no `[weak self]`).** These are one-shot blocks, not stored closures — there is no retain cycle.
+
+The Quick Look framework can release the view controller after calling `preparePreviewOfFile`. The view stays in the window hierarchy (toolbar visible), but the view controller is deallocated. With `[weak self]`, the main-queue callback sees `self == nil` and returns early without loading any content → **blank preview**.
+
+This caused a production regression: the toolbar rendered correctly but the WKWebView was completely empty.
+
+```swift
+// WRONG — causes blank previews
+DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+    ...
+    DispatchQueue.main.async { [weak self] in
+        guard let self else { handler(nil); return }  // ← silently bails out
+        self.loadCombined()
+    }
+}
+
+// CORRECT — strong self keeps VC alive until content loads
+DispatchQueue.global(qos: .userInitiated).async {
+    ...
+    DispatchQueue.main.async {
+        self.loadCombined()
+        handler(nil)
+    }
+}
+```
+
+`[weak self]` IS appropriate for long-lived or stored closures (e.g. `DispatchQueue.main.asyncAfter` in `copyAsHTML`) where you genuinely don't need self if it's gone.
+
+### NEVER remove com.apple.security.network.client from the extension entitlements
+
+**CRITICAL: WKWebView requires `com.apple.security.network.client` in sandboxed macOS apps — even for `loadHTMLString` with purely local/inline content.** Without this entitlement, `loadHTMLString` silently fails: no error, no delegate callback, no crash — the WKWebView simply renders nothing.
+
+This caused a multi-hour production debugging session. The entitlement was removed with the reasoning "we bundle everything offline, no network needed." While the *app* doesn't need network access, WKWebView's internal WebContent subprocess requires the entitlement to communicate with the host process.
+
+**Rule: Never remove entitlements from `ShowMdExtension.entitlements` without testing the Quick Look preview end-to-end in Finder.**
+
 ### WKWebView as optional
 
 Declare `webView` as `WKWebView?` (not `WKWebView!`) and guard at the top of any method that uses it. `preparePreviewOfFile` can theoretically be called before `loadView` completes in certain hosting configurations.
