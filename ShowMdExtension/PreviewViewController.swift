@@ -37,6 +37,7 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
 
     @objc private func settingsChanged() {
         guard !markdownSource.isEmpty else { return }
+        Settings.reload()
         let newTheme = Settings.theme
         let newFontSize = Settings.fontSize
         let newMermaid = Settings.mermaidEnabled
@@ -99,6 +100,7 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
             do {
                 let source = try String(contentsOf: url, encoding: .utf8)
                 DispatchQueue.main.async {
+                    Settings.reload()
                     self.currentTab = Settings.defaultTab
                     self.segmentedControl?.selectedSegment = self.currentTab == .rendered ? 0 : 1
                     self.copyButton?.isHidden = self.currentTab != .rendered

@@ -6,32 +6,13 @@ private typealias MdSettings = Settings
 private let extensionBundleID = "one.yetanother.showmd.app.extension"
 
 private func checkExtensionEnabled(completion: @escaping (Bool) -> Void) {
-    DispatchQueue.global(qos: .userInitiated).async {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/pluginkit")
-        process.arguments = ["-m", "-p", "com.apple.quicklook.preview", "-i", extensionBundleID]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        process.standardError = Pipe()
-        do {
-            try process.run()
-            process.waitUntilExit()
-            let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-            // pluginkit prefixes: "+" = enabled, "-" = disabled, " " = default.
-            // With EXDefaultUserElection=1 in Info.plist, default (" ") means enabled.
-            let disabled = output.contains(extensionBundleID) &&
-                output.split(separator: "\n")
-                    .first { $0.contains(extensionBundleID) }
-                    .map { $0.hasPrefix("-") } ?? false
-            let enabled = output.contains(extensionBundleID) && !disabled
-            DispatchQueue.main.async { completion(enabled) }
-        } catch {
-            let extensionURL = Bundle.main.builtInPlugInsURL?
-                .appendingPathComponent("ShowMdExtension.appex")
-            let exists = extensionURL.map { FileManager.default.fileExists(atPath: $0.path) } ?? false
-            DispatchQueue.main.async { completion(exists) }
-        }
-    }
+    // Check that the extension bundle exists inside the app.
+    // We can't shell out to pluginkit in a sandboxed app without triggering
+    // a TCC "access data from other apps" dialog.
+    let extensionURL = Bundle.main.builtInPlugInsURL?
+        .appendingPathComponent("ShowMdExtension.appex")
+    let exists = extensionURL.map { FileManager.default.fileExists(atPath: $0.path) } ?? false
+    completion(exists)
 }
 
 // MARK: - Logo
@@ -242,7 +223,7 @@ struct ContentView: View {
             }
             Text("  ·  ")
                 .foregroundStyle(.quaternary)
-            Link(destination: URL(string: "https://buymeacoffee.com/johannesnagl")!) {
+            Link(destination: URL(string: "https://paypal.me/jollife")!) {
                 Label("Buy me a pasta", systemImage: "cup.and.saucer")
             }
         }

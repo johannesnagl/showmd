@@ -32,34 +32,16 @@ jobs:
         id: version
         run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
 
-      - name: Archive
+      - name: Build release
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project "$APP_NAME.xcodeproj" \
             -scheme "$SCHEME" \
             -configuration Release \
-            -archivePath build/$APP_NAME.xcarchive \
+            -derivedDataPath build/DerivedData \
             DEVELOPMENT_TEAM="${{ secrets.APPLE_TEAM_ID }}" \
-            CODE_SIGN_STYLE=Automatic
-
-      - name: Export
-        run: |
-          cat > build/ExportOptions.plist << EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>method</key>
-              <string>developer-id</string>
-              <key>teamID</key>
-              <string>${{ secrets.APPLE_TEAM_ID }}</string>
-          </dict>
-          </plist>
-          EOF
-          xcodebuild -exportArchive \
-            -archivePath build/$APP_NAME.xcarchive \
-            -exportOptionsPlist build/ExportOptions.plist \
-            -exportPath build/export
+            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_IDENTITY="Developer ID Application"
 
       - name: Notarize
         env:
@@ -67,27 +49,37 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
         run: |
+          APP_PATH="build/DerivedData/Build/Products/Release/$APP_NAME.app"
           ditto -c -k --sequesterRsrc --keepParent \
-            "build/export/$APP_NAME.app" "build/$APP_NAME-notarize.zip"
+            "$APP_PATH" "build/$APP_NAME-notarize.zip"
           xcrun notarytool submit "build/$APP_NAME-notarize.zip" \
             --apple-id "$APPLE_ID" \
             --team-id "$APPLE_TEAM_ID" \
             --password "$APPLE_APP_PASSWORD" \
             --wait
-          xcrun stapler staple "build/export/$APP_NAME.app"
+          xcrun stapler staple "$APP_PATH"
 
       - name: Package
         id: package
         run: |
           VERSION="${{ steps.version.outputs.version }}"
-          cd build/export
+          APP_PATH="build/DerivedData/Build/Products/Release/$APP_NAME.app"
+
+          # DMG
+          hdiutil create -volname "$APP_NAME" \
+            -srcfolder "$APP_PATH" \
+            -ov -format UDZO \
+            "build/$APP_NAME-$VERSION.dmg"
+
+          # Zip (for Homebrew)
+          cd build/DerivedData/Build/Products/Release
           ditto -c -k --sequesterRsrc --keepParent \
-            "$APP_NAME.app" "../$APP_NAME-$VERSION.zip"
-          cd ..
-          SHA256=$(shasum -a 256 "$APP_NAME-$VERSION.zip" | awk '{print $1}')
-          echo "$SHA256  $APP_NAME-$VERSION.zip" > "$APP_NAME-$VERSION.zip.sha256"
-          echo "sha256=$SHA256" >> "$GITHUB_OUTPUT"
-          echo "zip=build/$APP_NAME-$VERSION.zip" >> "$GITHUB_OUTPUT"
+            "$APP_NAME.app" "../../../$APP_NAME-$VERSION.zip"
+          cd -
+
+          SHA256_ZIP=$(shasum -a 256 "build/$APP_NAME-$VERSION.zip" | awk '{print $1}')
+          echo "$SHA256_ZIP  $APP_NAME-$VERSION.zip" > "build/$APP_NAME-$VERSION.zip.sha256"
+          echo "sha256=$SHA256_ZIP" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release
         env:
@@ -95,6 +87,7 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           gh release create "v$VERSION" \
+            "build/$APP_NAME-$VERSION.dmg" \
             "build/$APP_NAME-$VERSION.zip" \
             "build/$APP_NAME-$VERSION.zip.sha256" \
             --title "showmd v$VERSION" \

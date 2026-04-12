@@ -26,6 +26,8 @@ brew install --cask showmd
 
 Then open **showmd** once, go to **System Settings → Privacy & Security → Extensions → Quick Look**, and enable it. After that, pressing <kbd>Space</kbd> on any Markdown file in Finder will use showmd automatically.
 
+> **Note:** On first launch, macOS will ask showmd to "access data from other apps." This is required so the host app and the Quick Look extension can share your settings (theme, font size, etc.) via App Groups. Click **Allow** — it only happens once.
+
 ## Features
 
 - **Full GitHub Flavored Markdown** — tables, task lists, strikethrough, fenced code blocks

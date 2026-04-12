@@ -108,6 +108,20 @@ DispatchQueue.global(qos: .userInitiated).async {
 
 `[weak self]` IS appropriate for long-lived or stored closures (e.g. `DispatchQueue.main.asyncAfter` in `copyAsHTML`) where you genuinely don't need self if it's gone.
 
+### Sandboxed apps + App Groups trigger TCC dialog on macOS 26
+
+On first launch, macOS 26 shows an "access data from other apps" dialog when a sandboxed app accesses an App Group container. This is unavoidable — it's Apple's TCC system. It only happens once per app after a clean install.
+
+**Workarounds attempted that did NOT work:**
+- Making the host app non-sandboxed → triggers the same dialog (non-sandboxed accessing Group Containers)
+- Using `Process()` to call `pluginkit` → triggers the dialog in sandboxed apps
+
+**Current approach:** Both host app and extension are sandboxed, use App Groups normally, and a first-launch hint in the UI explains the permission dialog. The `@AppStorage("hasGrantedDataAccess")` flag hides the hint after the user dismisses it.
+
+### NEVER use Process() in a sandboxed app
+
+Running `Process()` (e.g. to call `/usr/bin/pluginkit`) from a sandboxed app triggers the "access data from other apps" TCC dialog on every launch. Use `Bundle.main.builtInPlugInsURL` to check for the extension bundle instead.
+
 ### NEVER remove com.apple.security.network.client from the extension entitlements
 
 **CRITICAL: WKWebView requires `com.apple.security.network.client` in sandboxed macOS apps — even for `loadHTMLString` with purely local/inline content.** Without this entitlement, `loadHTMLString` silently fails: no error, no delegate callback, no crash — the WKWebView simply renders nothing.
@@ -283,14 +297,32 @@ The `tests/fixtures/` directory contains comprehensive `.md` files that exercise
 
 ---
 
-## Release Checklist (when ready)
+## Release Process
 
-1. Set DEVELOPMENT_TEAM in Xcode for both targets
-2. Archive → Distribute → Developer ID
-3. `xcrun notarytool submit ... --wait`
-4. `xcrun stapler staple showmd.app`
-5. `ditto -c -k --sequesterRsrc --keepParent showmd.app showmd-VERSION.zip`
-6. `shasum -a 256 showmd-VERSION.zip` → use in Homebrew cask
-7. `git tag vVERSION && git push origin main --tags`
-8. Create GitHub release, upload zip + sha256
-9. Update `Casks/show-md.rb` in homebrew-tap repo
+### Automated release script
+
+```bash
+NOTARIZE_TEAM_ID=S9U7NW7RU9 NOTARIZE_KEYCHAIN_PROFILE=holdor-notarize ./scripts/release.sh
+```
+
+The script handles: xcodegen → tests → build → Developer ID signing → notarization → staple → DMG + zip + checksums.
+
+### Key details
+
+- **Signing approach:** Build with `CODE_SIGN_STYLE=Automatic`, then re-sign with `codesign --force --options runtime --sign "Developer ID Application"`. Sign extension first (inside-out). No provisioning profiles or `exportArchive` needed for direct distribution.
+- **Notarization keychain profile:** `holdor-notarize` (shared across all apps — notarization is per-account, not per-project).
+- **No App Store / App Review needed** — direct distribution via GitHub Releases + Homebrew cask.
+- **Bundle IDs:** `one.yetanother.showmd.app` and `one.yetanother.showmd.app.extension` — registered in Apple Developer portal with App Groups capability.
+
+### Post-build checklist
+
+1. Test the app: `open build/DerivedData/Build/Products/Release/showmd.app`
+2. Tag and push: `git tag v$VERSION && git push origin v$VERSION`
+3. Create GitHub release with DMG + zip + sha256
+4. Update `Casks/showmd.rb` in `johannesnagl/homebrew-tap` with new version and SHA-256
+
+### Homebrew tap
+
+- Repo: `johannesnagl/homebrew-tap` — supports multiple casks in `Casks/` directory
+- Install: `brew tap johannesnagl/tap && brew install --cask showmd`
+- Update SHA-256 from zip checksum after each release
