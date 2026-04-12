@@ -1904,17 +1904,17 @@ $ npm run build · npm test · npm run lint</div>
     <div class="install-options">
       <div class="install-row">
         <div class="install-row-left">
-          <div class="install-method">Homebrew <span style="font-size:11px;font-weight:400;color:var(--muted);margin-left:6px;">coming soon</span></div>
-          <div class="install-cmd"><em>brew install --cask</em> showmd</div>
+          <div class="install-method">Homebrew</div>
+          <div class="install-cmd"><em>brew tap</em> johannesnagl/tap <em>&amp;&amp; brew install --cask</em> showmd</div>
         </div>
         <button class="install-btn ghost" id="copy-brew">copy</button>
       </div>
       <div class="install-row">
         <div class="install-row-left">
           <div class="install-method">Direct download</div>
-          <div class="install-cmd">showmd.zip — signed &amp; notarized</div>
+          <div class="install-cmd">showmd-1.0.0.dmg — signed &amp; notarized</div>
         </div>
-        <a href="https://github.com/johannesnagl/showmd/releases/latest" class="install-btn" rel="noopener" target="_blank">Download v1.0.0</a>
+        <a href="https://github.com/johannesnagl/showmd/releases/download/v1.0.0/showmd-1.0.0.dmg" class="install-btn" rel="noopener" target="_blank">Download v1.0.0</a>
       </div>
       <div class="install-row">
         <div class="install-row-left">
@@ -1936,7 +1936,7 @@ $ npm run build · npm test · npm run lint</div>
     <dl class="faq-list reveal">
       <div class="faq-item">
         <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a1">How do I enable showmd in Finder? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
-        <dd class="faq-answer" id="faq-a1">Download showmd, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable showmd there. After that, pressing Space on any .md file in Finder will use showmd automatically.</dd>
+        <dd class="faq-answer" id="faq-a1">Download showmd, open it once, then go to System Settings → Privacy &amp; Security → Extensions → Quick Look. Enable showmd there. On first launch, macOS will ask to "access data from other apps" — click Allow so the app and extension can share your settings. This only happens once. After that, pressing Space on any .md file in Finder will use showmd automatically.</dd>
       </div>
       <div class="faq-item">
         <dt><button class="faq-question" aria-expanded="false" aria-controls="faq-a2">What happens to YAML frontmatter? <span class="faq-chevron" aria-hidden="true">▾</span></button></dt>
@@ -2071,7 +2071,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', fun
   var brewBtn = document.getElementById('copy-brew');
   if (brewBtn) {
     brewBtn.addEventListener('click', function() {
-      navigator.clipboard.writeText('brew install --cask showmd').then(function() {
+      navigator.clipboard.writeText('brew tap johannesnagl/tap && brew install --cask showmd').then(function() {
         brewBtn.textContent = 'copied!';
         setTimeout(function() { brewBtn.textContent = 'copy'; }, 2000);
       }).catch(function() {
