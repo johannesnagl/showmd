@@ -152,6 +152,25 @@ import Markdown
         #expect(html.contains("done"))
     }
 
+    @Test func taskListItemHasTaskListItemClass() {
+        let html = render("- [ ] todo")
+        #expect(html.contains("<li class=\"task-list-item\">"))
+    }
+
+    @Test func regularListItemHasNoTaskListItemClass() {
+        let html = render("- regular item")
+        #expect(html.contains("<li>"))
+        #expect(!html.contains("task-list-item"))
+    }
+
+    @Test func mixedTaskAndRegularListItems() {
+        let html = render("- [ ] todo\n- regular\n- [x] done")
+        // Task items get the class, regular items do not
+        #expect(html.contains("<li class=\"task-list-item\"><input type=\"checkbox\" disabled>"))
+        #expect(html.contains("<li class=\"task-list-item\"><input type=\"checkbox\" disabled checked>"))
+        #expect(html.contains("<li>"))
+    }
+
     // MARK: - XSS prevention
 
     @Test func mathCodeBlockEscapesXSS() {

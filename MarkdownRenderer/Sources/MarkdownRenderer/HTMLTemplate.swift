@@ -214,7 +214,11 @@ public enum HTMLTemplate {
         }
         ul, ol { padding-left: 24px; margin-bottom: 16px; }
         li { margin-bottom: 4px; }
-        li input[type="checkbox"] { margin-right: 6px; }
+        li input[type="checkbox"] { margin-right: 6px; vertical-align: middle; }
+        li.task-list-item { list-style: none; margin-left: -20px; }
+        li.task-list-item > p { display: inline; margin: 0; }
+        li.task-list-item > p:first-of-type { display: inline; }
+        li.task-list-item input[type="checkbox"] { margin-right: 8px; }
         hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
         table {
           border-collapse: collapse;

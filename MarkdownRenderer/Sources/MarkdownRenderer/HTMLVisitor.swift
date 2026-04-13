@@ -189,11 +189,13 @@ struct HTMLVisitor: MarkupVisitor {
 
     mutating func visitListItem(_ listItem: ListItem) -> String {
         var prefix = ""
+        var classAttr = ""
         if let checkbox = listItem.checkbox {
             let checked = checkbox == .checked ? " checked" : ""
             prefix = "<input type=\"checkbox\" disabled\(checked)> "
+            classAttr = " class=\"task-list-item\""
         }
-        return "<li>\(prefix)\(defaultVisit(listItem))</li>\n"
+        return "<li\(classAttr)>\(prefix)\(defaultVisit(listItem))</li>\n"
     }
 
     // MARK: - Tables

@@ -28,7 +28,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ShowMd/ShowMd.entitlements
         DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "1.0.0"
+        MARKETING_VERSION: "1.0.1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: MarkdownRenderer
@@ -50,6 +50,6 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ShowMdExtension/ShowMdExtension.entitlements
         DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "1.0.0"
+        MARKETING_VERSION: "1.0.1"
     dependencies:
       - package: MarkdownRenderer
