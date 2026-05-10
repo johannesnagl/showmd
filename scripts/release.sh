@@ -98,6 +98,7 @@ if [[ "$SKIP_NOTARIZE" == false ]]; then
     echo "  Submitting via keychain profile '$NOTARIZE_KEYCHAIN_PROFILE'..."
     xcrun notarytool submit "$ZIP_FOR_NOTARIZE" \
       --keychain-profile "$NOTARIZE_KEYCHAIN_PROFILE" \
+      --team-id "$TEAM_ID" \
       --wait
   else
     echo "ERROR: Set NOTARIZE_APPLE_ID + NOTARIZE_PASSWORD, or NOTARIZE_KEYCHAIN_PROFILE"
