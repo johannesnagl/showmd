@@ -7,7 +7,7 @@ cask "showmd" do
   desc "Quick Look extension that renders Markdown beautifully on macOS"
   homepage "https://showmd.yetanother.one"
 
-  depends_on macos: ">= :sequoia"
+  depends_on macos: ">= :tahoe"
 
   app "showmd.app"
 

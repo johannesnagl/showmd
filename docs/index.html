@@ -56,7 +56,7 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "showmd",
-  "operatingSystem": "macOS 13+",
+  "operatingSystem": "macOS 26 (Tahoe) or later",
   "applicationCategory": "DeveloperApplication",
   "description": "A free, native macOS Quick Look extension that renders Markdown files beautifully. Parses YAML frontmatter into a collapsible metadata table, supports rendered and source views, and respects system dark mode.",
   "url": "https://showmd.yetanother.one",
@@ -816,9 +816,16 @@
 
   .install-btn.ghost:hover { color: var(--fg); border-color: var(--fg-muted); }
 
+  .install-hint {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 12px;
+    color: var(--fg-subtle);
+  }
+
   .install-pasta {
     text-align: center;
-    margin-top: 32px;
+    margin-top: 12px;
     font-size: 15px;
     color: var(--muted);
   }
@@ -1597,7 +1604,7 @@
       </a>
       <a href="#features" class="btn-secondary">see what it does →</a>
     </div>
-    <p class="hero-hint">Open source, free</p>
+    <p class="hero-hint">Open source, free — requires macOS 26 (Tahoe)</p>
     <p class="hero-ph-badge">
       <a href="https://www.producthunt.com/products/showmd-ai-markdown-quicklook-preview?embed=true&amp;utm_source=badge-featured&amp;utm_medium=badge&amp;utm_campaign=badge-showmd" target="_blank" rel="noopener noreferrer"><img alt="showmd - Markdown was never meant to be previewed plain text | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1122175&amp;theme=light&amp;t=1776067583855"></a>
     </p>
@@ -1943,6 +1950,7 @@ $ npm run build · npm test · npm run lint</div>
         <a href="https://github.com/johannesnagl/showmd" class="install-btn ghost" rel="noopener" target="_blank">View →</a>
       </div>
     </div>
+    <p class="install-hint">Requires macOS 26 (Tahoe) or later.</p>
     <p class="install-pasta">Do you like it? <a href="https://paypal.me/jollife" rel="noopener" target="_blank">Buy me a pasta 🍝</a></p>
   </section>
 

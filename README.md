@@ -20,8 +20,10 @@
 
 ## Install
 
+> **Requires macOS 26 (Tahoe) or later.**
+
 ```bash
-brew install --cask showmd
+brew install --cask johannesnagl/tap/showmd
 ```
 
 Then open **showmd** once, go to **System Settings → Privacy & Security → Extensions → Quick Look**, and enable it. After that, pressing <kbd>Space</kbd> on any Markdown file in Finder will use showmd automatically.

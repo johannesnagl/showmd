@@ -6,6 +6,8 @@ showmd is a free, native macOS Quick Look extension that renders Markdown beauti
 
 ## Install
 
+Requires macOS 26 (Tahoe) or later.
+
 ```
 brew install --cask johannesnagl/tap/showmd
 ```
