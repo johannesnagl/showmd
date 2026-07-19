@@ -45,6 +45,7 @@ Then open **showmd** once, go to **System Settings → Privacy & Security → Ex
 - **Copy as HTML** — one click to copy the rendered output
 - **Dark mode** — follows macOS appearance, or override in settings (Light / Dark / Auto)
 - **Adjustable font size** — Small, Medium, or Large
+- **Menu bar mode** — optionally hide the Dock icon and keep showmd in the menu bar instead
 - **Fully offline** — all JS/CSS dependencies are bundled, no network needed
 - **XSS-hardened** — all user content is escaped and raw HTML is sanitized
 

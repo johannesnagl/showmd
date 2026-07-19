@@ -154,6 +154,77 @@ The single-argument closure form is deprecated on macOS 14+. Use the two-argumen
 
 `Form { }.formStyle(.grouped)` is the macOS-native pattern for settings panels — no custom card styling needed.
 
+### windowResizability(.contentSize) ignores defaultSize — the Form must not scroll
+
+`.windowResizability(.contentSize)` sizes the window to the content's *ideal* height.
+A `Form` is scrollable, so its ideal height is indeterminate and SwiftUI settles on a
+short default — the window then clips the last section, and `.defaultSize(height:)`
+has no effect because `.contentSize` overrides it.
+
+**Fix:** make the form report its natural height so the window can grow to fit.
+
+```swift
+formView
+    .fixedSize(horizontal: false, vertical: true)
+```
+
+Do NOT "fix" this by bumping `.defaultSize` (ignored) or hard-coding a total window
+height (breaks the next time a section is added). This bug silently clipped the
+Appearance section for several releases before it was noticed.
+
+### Saved window frames mask sizing changes during testing
+
+macOS persists the window frame in `NSWindow Frame <autosaveName>` under the app's
+defaults domain and in `~/Library/Saved Application State/`. A rebuilt app restores
+the old frame, so window-sizing changes appear to do nothing. Clear both before
+testing sizing:
+
+```bash
+rm -rf ~/Library/"Saved Application State"/one.yetanother.showmd.app.savedState
+defaults delete one.yetanother.showmd.app
+```
+
+---
+
+## Dock vs Menu Bar Presentation
+
+### Toggle activation policy at runtime, not via LSUIElement
+
+`LSUIElement` in `Info.plist` hard-codes accessory mode and cannot be changed while
+running. For a *user-toggleable* preference, leave the plist alone and call
+`NSApp.setActivationPolicy(.accessory / .regular)` instead.
+
+Apply it in `applicationWillFinishLaunching` — later than that (e.g.
+`applicationDidFinishLaunching`) and the Dock icon visibly flashes before it is hidden.
+
+Returning `.accessory → .regular` needs an explicit `NSApp.activate()`, or the app
+comes forward with no main menu.
+
+### Model presentation as one enum, never two booleans
+
+Two independent flags ("show in Dock", "show in menu bar") admit a state where both
+are off and the app is running with no way to reach or quit it. A single
+`Settings.Presentation` enum (`.dock` / `.menuBar`) makes that unrepresentable, and
+the invariant is unit-testable in the package without importing AppKit — which
+matters because CI builds `MarkdownRenderer` on a `macos-15` runner and the package
+is also linked into the sandboxed Quick Look extension.
+
+Always include a **Quit** item in the menu bar menu: with the Dock icon hidden there
+is no other obvious way to quit.
+
+### Window vs WindowGroup for a single settings panel
+
+`WindowGroup` + `openWindow(id:)` opens a *new* window each time. Use `Window` so the
+menu bar's "Open showmd" focuses the existing settings window instead of stacking
+duplicates.
+
+### private typealias leaks into internal signatures
+
+`private typealias MdSettings = Settings` (the `SwiftUI.Settings` clash workaround)
+cannot appear in an `internal` function signature — "method must be declared
+fileprivate because its parameter uses a private type". Files that don't import
+SwiftUI have no clash to work around, so reference `Settings` directly there.
+
 ---
 
 ## Git Hygiene
@@ -221,14 +292,14 @@ When adding a feature, always add tests for:
 3. **XSS vectors** — try injecting `<script>`, event handlers, and `javascript:` URLs through every input path
 4. **Negative cases** — e.g. source-only template should NOT include rich feature scripts
 
-### Current test suites (51 tests total)
+### Current test suites (150 tests total)
 
 | Suite | What it covers |
 |-------|---------------|
 | `HTMLVisitorTests` | Every markdown element → HTML conversion: text, bold, italic, inline code, links, images, headings, code blocks (plain + language-specific + mermaid), blockquotes, lists, tables, task lists, strikethrough, HTML escaping |
 | `HTMLTemplateTests` | Template wrapping: DOCTYPE, body injection, theme attribute, font size, source body class, color-scheme meta, rich feature CDN inclusion (highlight.js, KaTeX, Mermaid), combined template tabs, frontmatter HTML |
 | `MarkdownRendererTests` | Public API: full render, theme application, font size, source HTML escaping |
-| `SettingsTests` | UserDefaults round-trips for all settings, defaults, CSS values, unknown raw value fallback |
+| `SettingsTests` | UserDefaults round-trips for all settings, defaults, CSS values, unknown raw value fallback, Dock/menu bar presentation mapping |
 
 ### Running tests
 

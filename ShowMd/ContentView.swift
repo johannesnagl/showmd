@@ -90,6 +90,7 @@ struct ContentView: View {
     @State private var theme: MdSettings.Theme = MdSettings.theme
     @State private var fontSize: MdSettings.FontSize = MdSettings.fontSize
     @State private var mermaidEnabled: Bool = MdSettings.mermaidEnabled
+    @State private var menuBarMode: Bool = MdSettings.menuBarMode
     @State private var extensionEnabled: Bool = false
 
     private var version: String {
@@ -100,7 +101,11 @@ struct ContentView: View {
         VStack(spacing: 0) {
             headerView
             Divider()
+            // Sized to its natural height rather than scrolling: combined with
+            // .windowResizability(.contentSize) the window grows to fit every
+            // section, so nothing is clipped as settings are added.
             formView
+                .fixedSize(horizontal: false, vertical: true)
             Divider()
             footerView
         }
@@ -109,6 +114,10 @@ struct ContentView: View {
         .onChange(of: theme)      { _, newValue in MdSettings.theme = newValue }
         .onChange(of: fontSize)   { _, newValue in MdSettings.fontSize = newValue }
         .onChange(of: mermaidEnabled) { _, newValue in MdSettings.mermaidEnabled = newValue }
+        .onChange(of: menuBarMode) { _, newValue in
+            MdSettings.menuBarMode = newValue
+            AppPresentation.apply(MdSettings.presentation)
+        }
         .preferredColorScheme(theme == .light ? .light : theme == .dark ? .dark : nil)
         .onAppear { checkExtensionEnabled { extensionEnabled = $0 } }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
@@ -185,6 +194,15 @@ struct ContentView: View {
             } header: {
                 Text("Appearance")
             }
+
+            Section {
+                Toggle("Show in Menu Bar Instead of Dock", isOn: $menuBarMode)
+                Text("Hide the Dock icon and keep showmd in the menu bar. Quick Look previews work the same either way.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            } header: {
+                Text("General")
+            }
         }
         .formStyle(.grouped)
     }
@@ -200,9 +218,7 @@ struct ContentView: View {
             }
             Spacer()
             Button(extensionEnabled ? "Manage" : "Enable") {
-                if let url = URL(string: "x-apple.systempreferences:com.apple.ExtensionsPreferences") {
-                    NSWorkspace.shared.open(url)
-                }
+                SystemSettings.openQuickLookExtensions()
             }
             .buttonStyle(.link)
             .font(.caption)

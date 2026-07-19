@@ -56,4 +56,49 @@ private let testSuiteName = "test.settings"
         Settings.mermaidEnabled = true
         #expect(Settings.mermaidEnabled == true)
     }
+
+    // MARK: - Menu bar mode
+
+    @Test func menuBarModeDefaultsToFalse() {
+        #expect(Settings.menuBarMode == false)
+    }
+
+    @Test func menuBarModeRoundTrips() {
+        Settings.menuBarMode = true
+        #expect(Settings.menuBarMode == true)
+    }
+
+    @Test func menuBarModeFallsBackToFalseForNonBooleanValue() {
+        Settings.userDefaults.set("garbage", forKey: "menuBarMode")
+        #expect(Settings.menuBarMode == false)
+    }
+
+    @Test func presentationDefaultsToDock() {
+        #expect(Settings.presentation == .dock)
+    }
+
+    @Test func presentationFollowsMenuBarMode() {
+        Settings.menuBarMode = true
+        #expect(Settings.presentation == .menuBar)
+        Settings.menuBarMode = false
+        #expect(Settings.presentation == .dock)
+    }
+
+    @Test func dockPresentationShowsOnlyTheDockIcon() {
+        #expect(Settings.Presentation.dock.showsDockIcon)
+        #expect(Settings.Presentation.dock.showsMenuBarItem == false)
+    }
+
+    @Test func menuBarPresentationShowsOnlyTheMenuBarItem() {
+        #expect(Settings.Presentation.menuBar.showsMenuBarItem)
+        #expect(Settings.Presentation.menuBar.showsDockIcon == false)
+    }
+
+    /// The app must never end up with zero affordances — that would leave it
+    /// running with no way to reach or quit it.
+    @Test func everyPresentationHasExactlyOneAffordance() {
+        for presentation in Settings.Presentation.allCases {
+            #expect(presentation.showsDockIcon != presentation.showsMenuBarItem)
+        }
+    }
 }
