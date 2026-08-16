@@ -27,6 +27,20 @@ public struct Settings {
         case auto, light, dark
     }
 
+    /// Where the host app appears when it is running.
+    ///
+    /// Deliberately not two independent flags: the app always has exactly one
+    /// affordance, so it can never end up hidden from both the Dock and the menu
+    /// bar with no way to reach or quit it.
+    ///
+    /// Host-app only — the Quick Look extension ignores this.
+    public enum Presentation: CaseIterable {
+        case dock, menuBar
+
+        public var showsDockIcon: Bool { self == .dock }
+        public var showsMenuBarItem: Bool { self == .menuBar }
+    }
+
     public enum FontSize: String, CaseIterable {
         case small, medium, large
 
@@ -57,5 +71,14 @@ public struct Settings {
     public static var mermaidEnabled: Bool {
         get { userDefaults.object(forKey: "mermaidEnabled") as? Bool ?? false }
         set { userDefaults.set(newValue, forKey: "mermaidEnabled"); userDefaults.synchronize() }
+    }
+
+    public static var menuBarMode: Bool {
+        get { userDefaults.object(forKey: "menuBarMode") as? Bool ?? false }
+        set { userDefaults.set(newValue, forKey: "menuBarMode"); userDefaults.synchronize() }
+    }
+
+    public static var presentation: Presentation {
+        menuBarMode ? .menuBar : .dock
     }
 }
