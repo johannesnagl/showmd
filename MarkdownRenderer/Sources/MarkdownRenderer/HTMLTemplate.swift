@@ -189,8 +189,8 @@ public enum HTMLTemplate {
         h3 { font-size: 1.15em; }
         h4, h5, h6 { font-size: 1em; }
         p { margin-bottom: 16px; }
-        a { color: var(--link); pointer-events: none; text-decoration: none; }
-        a[href^="#"] { pointer-events: auto; cursor: pointer; }
+        a { color: var(--link); text-decoration: none; cursor: pointer; }
+        a:hover { text-decoration: underline; }
         code {
           font-family: ui-monospace, SFMono-Regular, monospace;
           font-size: 0.875em;

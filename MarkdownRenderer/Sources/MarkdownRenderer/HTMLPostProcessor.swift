@@ -5,6 +5,7 @@ enum HTMLPostProcessor {
     static func process(_ html: String) -> String {
         var result = html
         result = convertGitHubAlerts(result)
+        result = convertQuartoCallouts(result)
         result = convertFootnotes(result)
         result = transformTextSegments(result) { text in
             var t = text
@@ -232,6 +233,49 @@ enum HTMLPostProcessor {
                 <div class="markdown-alert markdown-alert-\(cssClass)">
                 <p class="markdown-alert-title">\(icon) \(type.capitalized)</p>
                 \(body)
+                </div>
+                """
+            mutable.replaceCharacters(in: match.range, with: replacement)
+        }
+        return mutable as String
+    }
+
+    // MARK: - Quarto-style callouts (:::{ .callout-TYPE} ... :::)
+
+    private static let quartoBlockPattern = try! NSRegularExpression(
+        pattern: "<p>:::[ \\t]*\\{\\.callout-(note|tip|important|warning|caution)[^}]*\\}</p>\\s*([\\s\\S]*?)\\s*<p>:::</p>",
+        options: .caseInsensitive
+    )
+
+    private static let quartoInlinePattern = try! NSRegularExpression(
+        pattern: "<p>:::[ \\t]*\\{\\.callout-(note|tip|important|warning|caution)[^}]*\\}\\s+([\\s\\S]*?)\\s+:::</p>",
+        options: .caseInsensitive
+    )
+
+    static func convertQuartoCallouts(_ html: String) -> String {
+        var result = applyQuartoPattern(quartoBlockPattern, to: html)
+        result = applyQuartoPattern(quartoInlinePattern, to: result)
+        return result
+    }
+
+    private static func applyQuartoPattern(_ pattern: NSRegularExpression, to html: String) -> String {
+        let mutable = NSMutableString(string: html)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        let matches = pattern.matches(in: html, range: fullRange).reversed()
+
+        for match in matches {
+            guard let typeRange = Range(match.range(at: 1), in: html),
+                  let contentRange = Range(match.range(at: 2), in: html) else { continue }
+
+            let type = String(html[typeRange]).lowercased()
+            let content = String(html[contentRange])
+            let icon = alertIcons[type.uppercased()] ?? ""
+            let title = type.prefix(1).uppercased() + type.dropFirst()
+
+            let replacement = """
+                <div class="markdown-alert markdown-alert-\(type)">
+                <p class="markdown-alert-title">\(icon) \(title)</p>
+                \(content)
                 </div>
                 """
             mutable.replaceCharacters(in: match.range, with: replacement)

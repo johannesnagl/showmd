@@ -121,6 +121,15 @@ Settings are shared between the host app and the Quick Look extension via **App 
 | [KaTeX](https://katex.org/) | Math rendering (bundled) |
 | [Mermaid](https://mermaid.js.org/) | Diagram rendering (bundled) |
 
+## Contributors
+
+Thanks to everyone who has contributed to showmd:
+
+- [@oschrenk](https://github.com/oschrenk) — Homebrew cask fix
+- [@boxpositron](https://github.com/boxpositron) (David Ibia) — Menu bar mode
+- [@gsamat](https://github.com/gsamat) — Surfacing macOS version requirement
+- [@arhtwk](https://github.com/arhtwk) — Reporting Quarto callout and hyperlink issues
+
 ## License
 
 MIT

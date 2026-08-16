@@ -135,6 +135,18 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
 
     // MARK: - WKNavigationDelegate
 
+    func webView(_ webView: WKWebView,
+                 decidePolicyFor navigationAction: WKNavigationAction,
+                 decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if navigationAction.navigationType == .linkActivated,
+           let url = navigationAction.request.url {
+            NSWorkspace.shared.open(url)
+            decisionHandler(.cancel)
+            return
+        }
+        decisionHandler(.allow)
+    }
+
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         NSLog("[showmd] WKWebView didFinish navigation")
     }

@@ -241,6 +241,63 @@ import Testing
         #expect(result.contains("🚀"))
     }
 
+    // MARK: - Quarto callouts
+
+    @Test func quartoCalloutNoteBlockFormat() {
+        let input = "<p>::: {.callout-note}</p>\n<p>This is a note.</p>\n<p>:::</p>"
+        let result = HTMLPostProcessor.convertQuartoCallouts(input)
+        #expect(result.contains("markdown-alert-note"))
+        #expect(result.contains("markdown-alert-title"))
+        #expect(result.contains("Note"))
+        #expect(result.contains("This is a note."))
+        #expect(!result.contains(":::"))
+    }
+
+    @Test func quartoCalloutAllTypes() {
+        let types = ["note", "tip", "important", "warning", "caution"]
+        for type in types {
+            let input = "<p>::: {.callout-\(type)}</p>\n<p>Content</p>\n<p>:::</p>"
+            let result = HTMLPostProcessor.convertQuartoCallouts(input)
+            #expect(result.contains("markdown-alert-\(type)"),
+                    "Quarto callout type \(type) should produce class markdown-alert-\(type)")
+        }
+    }
+
+    @Test func quartoCalloutNoSpaceBeforeBrace() {
+        let input = "<p>:::{.callout-warning}</p>\n<p>Warning content.</p>\n<p>:::</p>"
+        let result = HTMLPostProcessor.convertQuartoCallouts(input)
+        #expect(result.contains("markdown-alert-warning"))
+        #expect(result.contains("Warning content."))
+    }
+
+    @Test func quartoCalloutMultiParagraph() {
+        let input = "<p>::: {.callout-tip}</p>\n<p>First paragraph.</p>\n<p>Second paragraph.</p>\n<p>:::</p>"
+        let result = HTMLPostProcessor.convertQuartoCallouts(input)
+        #expect(result.contains("markdown-alert-tip"))
+        #expect(result.contains("First paragraph."))
+        #expect(result.contains("Second paragraph."))
+    }
+
+    @Test func quartoCalloutInlineFormat() {
+        let input = "<p>::: {.callout-note} This is inline content. :::</p>"
+        let result = HTMLPostProcessor.convertQuartoCallouts(input)
+        #expect(result.contains("markdown-alert-note"))
+        #expect(result.contains("This is inline content."))
+    }
+
+    @Test func quartoCalloutRegularColonFencesUnchanged() {
+        let input = "<p>::: not-a-callout</p>\n<p>Content</p>\n<p>:::</p>"
+        let result = HTMLPostProcessor.convertQuartoCallouts(input)
+        #expect(result == input)
+    }
+
+    @Test func quartoCalloutInFullPipeline() {
+        let input = "<p>::: {.callout-tip}</p>\n<p>Use :rocket: for speed</p>\n<p>:::</p>"
+        let result = HTMLPostProcessor.process(input)
+        #expect(result.contains("markdown-alert-tip"))
+        #expect(result.contains("🚀"))
+    }
+
     // MARK: - Full pipeline
 
     @Test func processAppliesAllTransformations() {
