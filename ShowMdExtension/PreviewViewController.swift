@@ -11,6 +11,7 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
     private var renderedHTML = ""
     private var fileDirectoryURL: URL?
     private var currentTab: Settings.Tab = Settings.defaultTab
+    private var linkOpener: LinkOpenerProtocol?
 
     private var lastTheme: Settings.Theme = Settings.theme
     private var lastFontSize: Settings.FontSize = Settings.fontSize
@@ -70,6 +71,13 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
         wv.translatesAutoresizingMaskIntoConstraints = false
         wv.navigationDelegate = self
         webView = wv
+
+        let connection = NSXPCConnection(serviceName: "one.yetanother.showmd.link-opener")
+        connection.remoteObjectInterface = NSXPCInterface(with: LinkOpenerProtocol.self)
+        connection.resume()
+        linkOpener = connection.synchronousRemoteObjectProxyWithErrorHandler { error in
+            NSLog("[showmd] XPC connection error: %@", error.localizedDescription)
+        } as? LinkOpenerProtocol
 
         view.addSubview(segmentedControl)
         view.addSubview(copyButton)
@@ -139,8 +147,10 @@ class PreviewViewController: NSViewController, QLPreviewingController, WKNavigat
                  decidePolicyFor navigationAction: WKNavigationAction,
                  decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if navigationAction.navigationType == .linkActivated,
-           let url = navigationAction.request.url {
-            NSWorkspace.shared.open(url)
+           let url = navigationAction.request.url,
+           let scheme = url.scheme?.lowercased(),
+           scheme == "https" || scheme == "http" {
+            linkOpener?.open(url, withReply: { _ in })
             decisionHandler(.cancel)
             return
         }

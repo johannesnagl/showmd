@@ -28,7 +28,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ShowMd/ShowMd.entitlements
         DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "1.0.3"
+        MARKETING_VERSION: "1.0.4"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: MarkdownRenderer
@@ -40,6 +40,7 @@ targets:
     platform: macOS
     sources:
       - ShowMdExtension
+      - path: LinkOpener/LinkOpenerProtocol.swift
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: one.yetanother.showmd.app.extension
@@ -50,6 +51,25 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ShowMdExtension/ShowMdExtension.entitlements
         DEVELOPMENT_TEAM: S9U7NW7RU9
         CURRENT_PROJECT_VERSION: "1"
-        MARKETING_VERSION: "1.0.3"
+        MARKETING_VERSION: "1.0.4"
     dependencies:
       - package: MarkdownRenderer
+      - target: LinkOpener
+        embed: true
+
+  LinkOpener:
+    type: xpc-service
+    platform: macOS
+    sources:
+      - LinkOpener
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: one.yetanother.showmd.link-opener
+        MACOSX_DEPLOYMENT_TARGET: "26.0"
+        SWIFT_VERSION: "5.9"
+        INFOPLIST_FILE: LinkOpener/Info.plist
+        CODE_SIGN_STYLE: Automatic
+        DEVELOPMENT_TEAM: S9U7NW7RU9
+        CURRENT_PROJECT_VERSION: "1"
+        MARKETING_VERSION: "1.0.4"
+        SKIP_INSTALL: "YES"

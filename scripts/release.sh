@@ -68,8 +68,10 @@ fi
 echo "==> Signing with Developer ID..."
 SIGNING_ID="Developer ID Application: Johannes Nagl ($TEAM_ID)"
 
-# Sign the extension first, then the app (inside-out)
+# Sign inside-out: XPC service → extension → app
 # Must pass entitlements explicitly — codesign --force strips them otherwise
+codesign --force --options runtime --sign "$SIGNING_ID" \
+  "$APP_PATH/Contents/PlugIns/ShowMdExtension.appex/Contents/XPCServices/LinkOpener.xpc"
 codesign --force --options runtime --sign "$SIGNING_ID" \
   --entitlements "$PROJECT_DIR/ShowMdExtension/ShowMdExtension.entitlements" \
   "$APP_PATH/Contents/PlugIns/ShowMdExtension.appex"
