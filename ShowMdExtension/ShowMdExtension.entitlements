@@ -16,5 +16,9 @@
     <array>
         <string>/</string>
     </array>
+    <key>com.apple.security.temporary-exception.sbpl</key>
+    <array>
+        <string>(allow lsopen)</string>
+    </array>
 </dict>
 </plist>
