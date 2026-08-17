@@ -129,6 +129,7 @@ Thanks to everyone who has contributed to showmd:
 - [@boxpositron](https://github.com/boxpositron) (David Ibia) — Menu bar mode
 - [@gsamat](https://github.com/gsamat) — Surfacing macOS version requirement
 - [@arhtwk](https://github.com/arhtwk) — Reporting Quarto callout and hyperlink issues
+- [@TokkeDev](https://github.com/TokkeDev) — Reporting sandbox-blocked link opening
 
 ## License
 
