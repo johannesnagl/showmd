@@ -129,7 +129,9 @@ Thanks to everyone who has contributed to showmd:
 - [@boxpositron](https://github.com/boxpositron) (David Ibia) — Menu bar mode
 - [@gsamat](https://github.com/gsamat) — Surfacing macOS version requirement
 - [@arhtwk](https://github.com/arhtwk) — Reporting Quarto callout and hyperlink issues
-- [@TokkeDev](https://github.com/TokkeDev) — Reporting sandbox-blocked link opening
+- [@TokkeDev](https://github.com/TokkeDev) — Reporting sandbox-blocked link opening, Homebrew `postflight_steps` migration
+- [@ktreharrison](https://github.com/ktreharrison) — Homebrew `depends_on` syntax fix
+- [@pbroschwitz](https://github.com/pbroschwitz) — Homebrew `depends_on` syntax fix
 
 ## License
 

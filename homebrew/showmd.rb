@@ -11,8 +11,8 @@ cask "showmd" do
 
   app "showmd.app"
 
-  postflight do
-    system_command "/usr/bin/qlmanage", args: ["-r"]
+  postflight_steps do
+    run "/usr/bin/qlmanage", args: ["-r"]
   end
 
   zap trash: [
