@@ -133,6 +133,7 @@ Thanks to everyone who has contributed to showmd:
 - [@ktreharrison](https://github.com/ktreharrison) — Homebrew `depends_on` syntax fix
 - [@pbroschwitz](https://github.com/pbroschwitz) — Homebrew `depends_on` syntax fix
 - [@wburningham](https://github.com/wburningham) — Reporting the Homebrew `depends_on` breakage across both casks
+- [@tobiashochguertel](https://github.com/tobiashochguertel) — Homebrew `depends_on` fix for the holdor cask
 
 ## License
 
